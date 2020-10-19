@@ -16,6 +16,7 @@ public class Bridge {
 	private DatagramSocket socket;
 	private InetAddress bridgeIp;
 	private Integer port;
+	private int timeout;
 	private byte sequentialByte;
 	private byte wifiBridgeSessionID1;
 	private byte wifiBridgeSessionID2;
@@ -31,8 +32,8 @@ public class Bridge {
 	 *                  Starts a new Thread that keeps the session alive by sending a Message every 5 seconds. This message does not affect the lights.
 	 * @param timeOut timeout in milliseconds for receiving answers from the bridge
 	 */
-	public Bridge (String ip, Integer port, Boolean keepAlive, int timeOut) throws UnknownHostException, BridgeException {
-		this(InetAddress.getByName(ip), port, keepAlive, timeOut);
+	public Bridge (String ip, Integer port, Boolean keepAlive, int timeout) throws UnknownHostException, BridgeException {
+		this(InetAddress.getByName(ip), port, keepAlive, timeout);
 	}
 
 	/**
@@ -42,20 +43,12 @@ public class Bridge {
 	 *                  Starts a new Thread that keeps the session alive by sending a Message every 5 seconds. This message does not affect the lights.
 	 * @param timeOut timeout in milliseconds for receiving answers from the bridge. A timeout of zero is interpreted as an infinite timeout.
 	 */
-	public Bridge (InetAddress ip, Integer port, Boolean keepAlive, int timeOut) throws BridgeException {
+	public Bridge (InetAddress ip, Integer port, Boolean keepAlive, int timeout) throws BridgeException {
 		System.out.println("Initializing Bridge");
 		this.port = port;
 		this.sequentialByte = 1;
 		this.bridgeIp = ip;
-		try {
-			socket = new DatagramSocket();
-			socket.setSoTimeout(timeOut);
-		} catch (SocketException e) {
-
-			// TODO Error handling
-
-			e.printStackTrace();
-		}
+		this.timeout = timeout;
 
 		// start the session
 		startNewSession(10);
@@ -363,6 +356,10 @@ public class Bridge {
 			return null;
 		}
 
+		String modifiedSentence = bytesToHexString(receivePacket.getData());
+		System.out.println("received data: " + modifiedSentence + "\n");
+		System.out.println("wifiBridgeSessionID1: " + bytesToHexString(wifiBridgeSessionID1) + ", wifiBridgeSessionID2: " + bytesToHexString(wifiBridgeSessionID2));
+
 		// Check if the Session is still alive
 		if(!sessionAlive(receiveData)) {
 			System.out.println("###\n\tBRIDGE NOT CONNECTED\n###");
@@ -379,9 +376,6 @@ public class Bridge {
 			}
 		}
 
-		String modifiedSentence = bytesToHexString(receivePacket.getData());
-		System.out.println("received data: " + modifiedSentence + "\n");
-		System.out.println("wifiBridgeSessionID1: " + bytesToHexString(wifiBridgeSessionID1) + ", wifiBridgeSessionID2: " + bytesToHexString(wifiBridgeSessionID2));
 		return receiveData;
 	}
 
@@ -479,7 +473,6 @@ public class Bridge {
 	 * @return byte array that can be send to the Bridge
 	 */
 	private byte[] createData(int commandNr, byte zone, byte value) {
-		System.out.println("--------------------------------------------\n## creating data ##");
 		// format of command:
 		// 9 byte packet = 0x31 {PasswordByte1 default 00} {PasswordByte2 default 00} {remoteStyle 08 for RGBW/WW/CW or 00 for bridge lamp} {LightCommandByte1} {LightCommandByte2} 0x00 0x00 0x00 {Zone1-4 0=All} 0x00 {Checksum}
 		byte[] command = createCommand(commandNr, value);
@@ -492,17 +485,11 @@ public class Bridge {
 
 		sequentialByte++;
 
-		System.out.println("data before checksum insertion: " +  bytesToHexString(data));
-
 		// insert checksum
 		// RGBW/WW/CW Checksum Byte Calculation is the sum of the 11 bytes before end of the UDP packet. The checksum is then added to the end of the UDP message.
 		// take the 9 bytes of the command, and 1 byte of the zone, and add the 0 = the checksum
 		byte checksum = calculateChecksum(Arrays.copyOfRange(data, 10,21));
 		data [21] = checksum;
-
-		System.out.println("checksum: " + checksum);
-		System.out.println("data: " +  bytesToHexString(data));
-		System.out.println("## data created ##\n--------------------------------------------");
 
 		return data;
 	}
@@ -636,6 +623,14 @@ public class Bridge {
 		boolean autoRestBackup = automaticallyRestartSession;
 		automaticallyRestartSession = false;
 
+		// Replace socket to discard possible old packages in receive buffer.
+		try {
+			socket = new DatagramSocket();
+			socket.setSoTimeout(timeout);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+
 		// increase response timeout
 		int oldTimeout = 0;
 		try {
@@ -682,7 +677,6 @@ public class Bridge {
 		automaticallyRestartSession = autoRestBackup;
 
 		// Debug output
-		System.out.println(bytesToHexString(received));
 		System.out.println("bridge connected");
 
 		// reset the timeout
