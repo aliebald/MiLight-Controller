@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import main.java.bridge.Bridge;
+import main.java.bridge.Mode;
 import main.java.bridge.Zone;
 import main.java.control.MusicModeController;
 import main.java.musicModes.*;
@@ -170,33 +171,72 @@ public class HttpWebServer {
 			// Change Mode
 			if(command.startsWith("setMode:")) {
 				System.out.println("looking for: " + command.substring(8));
-				switch (command.substring(8)) {
-					case "MCyclic": {
-						musicModeController.setMusicMode(new CyclicLights(bridge));
-						break;
+				if (command.substring(8).charAt(0) == 'M') {
+					// Music Modes
+					switch (command.substring(8)) {
+						case "MCyclic": {
+							musicModeController.setMusicMode(new CyclicLights(bridge));
+							break;
+						}
+						case "MFlashing": {
+							musicModeController.setMusicMode(new FlashingLights(bridge));
+							break;
+						}
+						case "MPulse": {
+							musicModeController.setMusicMode(new PulseLights(bridge));
+							break;
+						}
+						case "MSequential": {
+							musicModeController.setMusicMode(new SequentialLights(bridge));
+							break;
+						}
+						case "MSiren": {
+							musicModeController.setMusicMode(new SirenLights(bridge));
+							break;
+						}
+						default: {
+							return "ERROR: Unknown Mode";
+						}
 					}
-					case "MFlashing": {
-						musicModeController.setMusicMode(new FlashingLights(bridge));
-						break;
-					}
-					case "MPulse": {
-						musicModeController.setMusicMode(new PulseLights(bridge));
-						break;
-					}
-					case "MSequential": {
-						musicModeController.setMusicMode(new SequentialLights(bridge));
-						break;
-					}
-					case "MSiren": {
-						musicModeController.setMusicMode(new SirenLights(bridge));
-						break;
-					}
-					default: {
-						return "ERROR: Unknown Mode";
+					// Start Thread for MusicModeController
+					mmcThread = new Thread(musicModeController);
+					mmcThread.start();
+				} else {
+					// Build in modes
+					switch (command.substring(8)) {
+						case "ColorWheel": {
+							bridge.setMode(zone, Mode.COLOR_WHEEL);
+							break;
+						}
+						case "BreathingColorWheel": {
+							bridge.setMode(zone, Mode.BREATHING_COLOR_WHEEL);
+							break;
+						}
+						case "Party": {
+							bridge.setMode(zone, Mode.PARTY);
+							break;
+						}
+						case "PartyMultipleColors": {
+							bridge.setMode(zone, Mode.PARTY_MULTIPLE_COLORS);
+							break;
+						}
+						case "FlashRed": {
+							bridge.setMode(zone, Mode.FLASH_RED);
+							break;
+						}
+						case "FlashGreen": {
+							bridge.setMode(zone, Mode.FLASH_GREEN);
+							break;
+						}
+						case "FlashBlue": {
+							bridge.setMode(zone, Mode.FLASH_BLUE);
+							break;
+						}
+						default: {
+							return "ERROR: Unknown Mode";
+						}
 					}
 				}
-				mmcThread = new Thread(musicModeController);
-				mmcThread.start();
 				return "Changed mode to: " + command.substring(8);
 			}
 

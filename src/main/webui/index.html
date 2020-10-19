@@ -172,7 +172,7 @@
 					<!-- navigation tabs -->
 					<ul class="nav nav-pills nav-fill modeSelector pt-2 pb-2" id="pills-tab" role="tablist">
 						<li class="nav-item">
-							<a class="nav-link active textDark" id="normalModes-tab" data-toggle="pill" href="#normalModes" role="tab" aria-controls="pills-home" aria-selected="true">Normal Modes</a>
+							<a class="nav-link active textDark" id="buildInModes-tab" data-toggle="pill" href="#buildInModes" role="tab" aria-controls="pills-home" aria-selected="true">Build in Modes</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link textDark" id="musicModes-tab" data-toggle="pill" href="#musicModes" role="tab" aria-controls="pills-profile" aria-selected="false">Music Modes</a>
@@ -180,20 +180,30 @@
 					</ul>
 					<!-- Content -->
 					<div class="tab-content" id="pills-tabContent">
-						<!-- Content for normal modes -->
-						<div class="container modeTabs tab-pane fade show textDark active" id="normalModes" role="tabpanel" aria-labelledby="normalModes-tab">
+						<!-- Content for buildIn modes -->
+						<div class="container modeTabs tab-pane fade show textDark active" id="buildInModes" role="tabpanel" aria-labelledby="buildInModes-tab">
 							<div class="row">
 								<div class="col-12">
-									<div class="list-group modesList" id="normalModes-tab-tabs" role="tablist">
-										<a class="list-group-item list-group-item-action" id="normalMode1Tab" data-toggle="list" href="#normalMode1Info" role="tab" aria-controls="normalMode1Tab">Mode 1</a>
-										<a class="list-group-item list-group-item-action" id="normalMode2Tab" data-toggle="list" href="#normalMode2Info" role="tab" aria-controls="normalMode2Tab">Mode 2</a>
+									<div class="list-group modesList" id="buildInModes-tab-tabs" role="tablist">
+										<a class="list-group-item list-group-item-action" id="colorWheelTab" 			data-toggle="list" href="#colorWheelInfo" 			role="tab" aria-controls="buildInMode2Tab">ColorWheel</a>
+										<a class="list-group-item list-group-item-action" id="breathingColorWheelTab" 	data-toggle="list" href="#breathingColorWheelInfo" 	role="tab" aria-controls="buildInMode1Tab">BreathingColorWheel</a>
+										<a class="list-group-item list-group-item-action" id="partyTab"					data-toggle="list" href="#partyInfo" 				role="tab" aria-controls="buildInMode2Tab">Party</a>
+										<a class="list-group-item list-group-item-action" id="partyMultipleColorsTab" 	data-toggle="list" href="#partyMultipleColorsInfo" 	role="tab" aria-controls="buildInMode1Tab">PartyMultipleColors</a>
+										<a class="list-group-item list-group-item-action" id="flashRedTab" 				data-toggle="list" href="#flashRedInfo" 			role="tab" aria-controls="buildInMode2Tab">FlashRed</a>
+										<a class="list-group-item list-group-item-action" id="flashGreenTab"			data-toggle="list" href="#flashGreenInfo" 			role="tab" aria-controls="buildInMode1Tab">FlashGreen</a>
+										<a class="list-group-item list-group-item-action" id="flashBlueTab"				data-toggle="list" href="#flashBlueInfo" 			role="tab" aria-controls="buildInMode2Tab">FlashBlue</a>
 									</div>
 								</div>
 							</div>
 							<div class="col-12 pt-2 pb-3">
 								<div class="tab-content" id="nav-tabContent">
-									<div class="tab-pane fade show" id="normalMode1Info" role="tabpanel" aria-labelledby="normalMode1Tab">Mode 1</div>
-									<div class="tab-pane fade" id="normalMode2Info" role="tabpanel" aria-labelledby="normalMode2Tab">Mode 2</div>
+									<div class="tab-pane fade" id="colorWheelInfo" 			role="tabpanel" aria-labelledby="colorWheelTab">ColorWheel</div>
+									<div class="tab-pane fade" id="breathingColorWheelInfo" role="tabpanel" aria-labelledby="breathingColorWheelTab">BreathingColorWheel</div>
+									<div class="tab-pane fade" id="partyInfo" 				role="tabpanel" aria-labelledby="partyTab">Party</div>
+									<div class="tab-pane fade" id="partyMultipleColorsInfo" role="tabpanel" aria-labelledby="partyMultipleColorsTab">PartyMultipleColors</div>
+									<div class="tab-pane fade" id="flashRedInfo" 			role="tabpanel" aria-labelledby="flashRedTab">FlashRed</div>
+									<div class="tab-pane fade" id="flashGreenInfo" 			role="tabpanel" aria-labelledby="flashGreenTab">FlashGreen</div>
+									<div class="tab-pane fade" id="flashBlueInfo" 			role="tabpanel" aria-labelledby="flashBlueTab">FlashBlue</div>
 								</div>
 							</div>
 						</div>

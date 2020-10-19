@@ -6,13 +6,13 @@ package main.java.bridge;
  * @author Alexander Liebald
  */
 public enum Mode {
-	BreathingColorWheel(2),
-	Party(3),
-	PartyMultipleColors(4),
-	FlashRed(5),
-	FlashGreen(6),
-	FlashBlue(7),
-	ColorWheel(9);
+	BREATHING_COLOR_WHEEL(2),
+	PARTY(3),
+	PARTY_MULTIPLE_COLORS(4),
+	FLASH_RED(5),
+	FLASH_GREEN(6),
+	FLASH_BLUE(7),
+	COLOR_WHEEL(9);
 
 	private final byte byteNr;
 

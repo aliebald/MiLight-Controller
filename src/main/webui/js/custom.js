@@ -103,30 +103,53 @@ colorPicker.on('color:change', function(color) {
 	document.getElementById("addColorBtn").style.background = color.hexString;
 });
 
-// Mode selector tabs
-const cyclicLightsTab = document.getElementById("cyclicLightsTab");
-const flashingLightsTab = document.getElementById("flashingLightsTab");
-const pulseLightTab = document.getElementById("pulseLightTab");
-const sequentialLightsTab = document.getElementById("sequentialLightsTab");
-const sirenLightsTab = document.getElementById("sirenLightsTab");
+//  Mode selector tabs: build in modes
+document.getElementById("colorWheelTab").onclick = function () {
+	sendCommand("setMode:ColorWheel");
+}
 
-cyclicLightsTab.onclick = function () {
+document.getElementById("breathingColorWheelTab").onclick = function () {
+	sendCommand("setMode:BreathingColorWheel");
+}
+
+document.getElementById("partyTab").onclick = function () {
+	sendCommand("setMode:Party");
+}
+
+document.getElementById("partyMultipleColorsTab").onclick = function () {
+	sendCommand("setMode:PartyMultipleColors");
+}
+
+document.getElementById("flashRedTab").onclick = function () {
+	sendCommand("setMode:FlashRed");
+}
+
+document.getElementById("flashGreenTab").onclick = function () {
+	sendCommand("setMode:FlashGreen");
+}
+
+document.getElementById("flashBlueTab").onclick = function () {
+	sendCommand("setMode:FlashBlue");
+}
+
+// Mode selector tabs: music modes
+document.getElementById("cyclicLightsTab").onclick = function () {
 	sendCommand("setMode:MCyclic");
 }
 
-flashingLightsTab.onclick = function () {
+document.getElementById("flashingLightsTab").onclick = function () {
 	sendCommand("setMode:MFlashing");
 }
 
-pulseLightTab.onclick = function () {
+document.getElementById("pulseLightTab").onclick = function () {
 	sendCommand("setMode:MPulse");
 }
 
-sequentialLightsTab.onclick = function () {
+document.getElementById("sequentialLightsTab").onclick = function () {
 	sendCommand("setMode:MSequential");
 }
 
-sirenLightsTab.onclick = function () {
+document.getElementById("sirenLightsTab").onclick = function () {
 	sendCommand("setMode:MSiren");
 }
 
