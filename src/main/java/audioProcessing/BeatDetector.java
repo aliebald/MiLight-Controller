@@ -1,6 +1,7 @@
 package main.java.audioProcessing;
 
 import javax.sound.sampled.*;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 /**
@@ -10,10 +11,10 @@ import java.util.LinkedList;
  */
 // @SuppressWarnings({"FieldCanBeLocal"}) // TODO remove this and look over the variables when finished
 public class BeatDetector {
-	private final AudioFormat audioFormat;
-	private final float sampleRate = 44100;
-	private final int sampleSizeInBits = 16;
-	private final int channels = 1;
+	private static final float sampleRate = 44100;
+	private static final int sampleSizeInBits = 16;
+	private static final int channels = 1;
+	private static final AudioFormat audioFormat = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, true);
 
 	private final LinkedList <Long> historyBuffer = new LinkedList<>();
 	private final Normalizer normalizer = new Normalizer();;
@@ -33,17 +34,21 @@ public class BeatDetector {
 	private byte[] buffer = new byte[bufferSize];
 
 	/**
+	 * @param targetDataLine TODO
+	 *
 	 * @param cooldown minimum time in milliseconds between beats.
 	 *                 A high value can lead to skipped beats while a low value may lead to the same beat being detected twice.
 	 *                 Setting this to a higher value reduces load on the network, Bridge and controllers. A good starting point
 	 *                 could be between 80-200, but values outside of this range can make sense too.
 	 */
-	public BeatDetector(int cooldown) {
+	public BeatDetector(int cooldown, String targetDataLine) {
 		lastBeat = System.currentTimeMillis();
 		this.cooldown = cooldown;
-		// Create audio format
-		audioFormat = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, true);
-		line = getStdTargetDataLine(audioFormat);
+		if (targetDataLine != null) {
+			line = getTargetDataLine(targetDataLine);
+		} else {
+			line = getStdTargetDataLine();
+		}
 
 		// Open and start the TargetDataLine
 		try {
@@ -55,6 +60,15 @@ public class BeatDetector {
 		}
 
 		line.start();
+	}
+
+	/**
+	 * TODO description
+	 *
+	 * @param cooldown
+	 */
+	public BeatDetector(int cooldown) {
+		this(cooldown, null);
 	}
 
 	/**
@@ -231,11 +245,11 @@ public class BeatDetector {
 	 * Work in progress!
 	 * Returns the standard TargetDataLine.
 	 * TODO: automatically find the true standard TargetDataLine and make it possible to choose TargetDataLine in web interface (setup and settings wip).
+	 * TODO: rework
 	 *
-	 * @param audioFormat AudioFormat used for the TargetDataLine
 	 * @return standard TargetDataLine to listen to.
 	 */
-	private static TargetDataLine getStdTargetDataLine (AudioFormat audioFormat) {
+	private static TargetDataLine getStdTargetDataLine () {
 		DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
 
 		// Print available mixers
@@ -274,6 +288,77 @@ public class BeatDetector {
 		System.out.println("TargetDataLine: " + targetDataLine.getLineInfo() + "\n#######\n");
 		return targetDataLine;
 
+	}
+
+	/**
+	 * TODO description
+	 *
+	 * @param name
+	 * @return
+	 */
+	private TargetDataLine getTargetDataLine(String name) {
+		DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
+		Mixer.Info[] mixers = AudioSystem.getMixerInfo();
+
+		Mixer mixer = null;
+		for (Mixer.Info m : mixers) {
+			if (m.getName().equals(name)){
+				mixer = AudioSystem.getMixer(m);
+				System.out.println(" Set mixer to " + mixer.getMixerInfo().getName());
+				break;
+			}
+		}
+		if (mixer == null) {
+			// TODO error handling
+			System.out.println("Failed to get mixer: " + name);
+			return getStdTargetDataLine();
+		}
+
+		Line.Info targetLineInfo = mixer.getTargetLineInfo()[0];
+		TargetDataLine targetDataLine = null;
+		try {
+			targetDataLine = (TargetDataLine) mixer.getLine(targetLineInfo);
+		} catch (LineUnavailableException e) {
+			// TODO
+			e.printStackTrace();
+		}
+
+		System.out.println("TargetDataLine: " + targetDataLine.getLineInfo() + "\n#######\n");
+		return targetDataLine;
+	}
+
+	/**
+	 * TODO description
+	 *
+	 * @return
+	 */
+	public static LinkedList<String> getPossibleTargetDataLines() {
+		LinkedList<String> lines = new LinkedList<String>();
+		DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
+		Mixer.Info[] mixers = AudioSystem.getMixerInfo();
+
+		for (Mixer.Info m : mixers) {
+			Mixer mixer = AudioSystem.getMixer(m);
+			if (canCreateTargetDataLine(mixer, info)) {
+				lines.add(mixer.getMixerInfo().getName());
+			}
+		}
+		return lines;
+	}
+
+	/**
+	 * Checks if a line represented by a string is a valid TargetDataLine
+	 *
+	 * @param line name of a TargetDataLine.
+	 * @return true if {@code line} is a valid TargetDataLine.
+	 */
+	public static boolean isValidTargetDataLine(String line) {
+		for (String validLine : BeatDetector.getPossibleTargetDataLines()) {
+			if (line.equals(validLine)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static boolean canCreateTargetDataLine(Mixer mixer, DataLine.Info info) {

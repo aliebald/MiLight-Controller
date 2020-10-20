@@ -1,5 +1,6 @@
 package main.java.control;
 
+import main.java.Settings;
 import main.java.audioProcessing.BeatDetector;
 import main.java.bridge.*;
 import main.java.musicModes.CyclicLights;
@@ -13,36 +14,23 @@ import java.net.UnknownHostException;
  * @author Alexander Liebald
  */
 public class Controller {
-	Bridge bridge;
-	HttpWebServer server;
+	private HttpWebServer server;
+	private Settings settings;
 
-	public Controller(Bridge bridge) {
-		this.bridge = bridge;
-	}
-
-	public Controller(String ip, int port, int timeout) throws UnknownHostException, BridgeException {
-		this(new Bridge(ip, port, false, timeout));
+	public Controller(Settings settings) {
+		this.settings = settings;
 	}
 
 	// TODO
-	public void startServer(int port) throws IOException {
-		Bridge bridge = null;
-		try {
-			bridge = new Bridge("192.168.0.52", 5987, false, 100);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
-
-		server = new HttpWebServer(port, bridge, new MusicModeController(new CyclicLights(bridge), new BeatDetector(100)));
+	public void startServer(int port) throws IOException, BridgeException {
+		server = new HttpWebServer(port, settings);
 		server.start();
 	}
 
 	public static void main(String[] args) throws IOException, BridgeException {
-		Bridge bridge = new Bridge("192.168.0.52", 5987, false, 250);
-		bridge.turnOn(Zone.ALL);
-		bridge.setBrightness(Zone.ALL,100);
-		Controller controller = new Controller(bridge);
+		// Bridge bridge = new Bridge("192.168.0.52", 5987, false, 250);
+
+		Controller controller = new Controller(new Settings());
 		controller.startServer(8000);
 	}
 }

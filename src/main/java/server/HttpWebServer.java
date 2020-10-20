@@ -3,7 +3,10 @@ package main.java.server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+import main.java.Settings;
+import main.java.audioProcessing.BeatDetector;
 import main.java.bridge.Bridge;
+import main.java.bridge.BridgeException;
 import main.java.bridge.Mode;
 import main.java.bridge.Zone;
 import main.java.control.MusicModeController;
@@ -16,6 +19,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -31,11 +35,11 @@ public class HttpWebServer {
 	private Bridge bridge;
 	private MusicModeController musicModeController;
 	private Thread mmcThread;
+	private Settings settings;
 
-	public HttpWebServer(int port, Bridge bridge, MusicModeController musicModeController) throws IOException {
-		this.musicModeController = musicModeController;
+	public HttpWebServer(int port, Settings settings) throws IOException {
 		this.port 		= port;
-		this.bridge 	= bridge;
+		this.settings	= settings;
 
 		site 			= new String(Files.readAllBytes(Paths.get(path + "\\index.html")));
 		customCSS 		= new String(Files.readAllBytes(Paths.get(path + "\\css\\custom.css")));
@@ -45,7 +49,14 @@ public class HttpWebServer {
 	/**
 	 * Start the website server
 	 */
-	public void start() throws IOException {
+	public void start() throws IOException, BridgeException {
+		if (!settings.getBridgeIpAddress().equals("")) {
+			bridge = new Bridge(settings.getBridgeIpAddress(), settings.getBridgePort(), false, 250);
+
+			if (!settings.getActiveTargetDataLine().equals("none")) {
+				musicModeController = new MusicModeController(null, new BeatDetector(100, settings.getActiveTargetDataLine()));
+			}
+		}
 		InetAddress address = InetAddress.getLocalHost();
 
 		HttpServer server = HttpServer.create(new InetSocketAddress(address, port), 0);
@@ -53,8 +64,8 @@ public class HttpWebServer {
 		server.setExecutor(null); // creates a default executor
 		server.start();
 
-		// Try opening a browser tab
-		if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+		// open a new browser tab
+		if (settings.getOpenBrowserOnStart() && Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 			try {
 				Desktop.getDesktop().browse(new URI("http://" + address.getHostAddress() + ":" + port));
 			} catch (URISyntaxException ignored) {}
@@ -74,34 +85,41 @@ public class HttpWebServer {
 		@Override
 		public void handle(HttpExchange t) throws IOException {
 			URI request = t.getRequestURI();
-			System.out.println("requested: " + request);
-			String response = site;
+			String response, requestBody = getRequestBody(t);
+			System.out.println("requested: " + request + ", RequestMethod: " + t.getRequestMethod() + ", RequestBody: " + requestBody);
 
-			// select the correct response
 			if (isCommand(request.getPath())){
-				System.out.println("request recognised as command");
-				response = handleCommand(request.getPath());
+				// select the correct response
+				if (!settings.getBridgeIpAddress().equals("")) {
+					System.out.println("request recognised as command");
+					response = handleCommand(request.getPath());
+				} else {
+					response = "ERROR: Please create a bridge";
+				}
 			} else {
-				// Website content request
 				switch (request.getPath()) {
-					case ("/"): {
+					case "/": {
 						response = site;
 						System.out.println("	set the response to site");
 						break;
-					}
-					case ("/css/custom.css"): {
+					} case "/css/custom.css": {
 						response = customCSS;
 						System.out.println("	set the response to customCSS");
 						break;
-					}
-					case ("/js/custom.js"): {
+					} case "/js/custom.js": {
 						response = customJs;
 						System.out.println("	set the response to custom.js");
 						break;
-					}
-					case ("/favicon.ico"): {
+					} case "/favicon.ico": {
 						response = "";
 						System.out.println("	return empty String. No favicon.ico right now");
+						break;
+					} case "/settings.json": {
+						response = settings.getSettings();
+						System.out.println("	return set to settings.json");
+						break;
+					} case "/applySettings": {
+						response = applySettings(requestBody);
 						break;
 					}
 					default: {
@@ -130,7 +148,9 @@ public class HttpWebServer {
 		 */
 		private String handleCommand(String request) {
 			// Stop musicModeController
-			musicModeController.stop();
+			if (musicModeController != null) {
+				musicModeController.stop();
+			}
 
 			// get command
 			int end = request.indexOf('&');
@@ -172,6 +192,11 @@ public class HttpWebServer {
 			if(command.startsWith("setMode:")) {
 				System.out.println("looking for: " + command.substring(8));
 				if (command.substring(8).charAt(0) == 'M') {
+					// Check if musicModeController exists
+					if (musicModeController == null) {
+						return "ERROR: Select audio input to use music modes";
+					}
+
 					// Music Modes
 					switch (command.substring(8)) {
 						case "MCyclic": {
@@ -240,6 +265,7 @@ public class HttpWebServer {
 				return "Changed mode to: " + command.substring(8);
 			}
 
+			// Other basic commands
 			switch (command) {
 				case "turnOn": {
 					bridge.turnOn(zone);
@@ -284,6 +310,53 @@ public class HttpWebServer {
 			}
 
 			return "ERROR: Command not found!";
+		}
+
+		private String getRequestBody(HttpExchange t) throws IOException {
+			return new String(t.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+		}
+
+		/**
+		 * Updates settings
+		 *
+		 * @param requestBody requestBody from http request
+		 * @return response String
+		 */
+		private String applySettings(String requestBody) {
+			String oldIp = settings.getBridgeIpAddress();
+			int oldPort = settings.getBridgePort();
+			try {
+				settings.updateSettings(requestBody);
+			} catch (Exception ignored) {
+				return "ERROR: Failed to update settings";
+			}
+
+			// setup bridge / replace bridge if ip or port changed
+			if (settings.getHasBridge() && (bridge == null || !oldIp.equals(settings.getBridgeIpAddress()) || oldPort != settings.getBridgePort())) {
+				// stop musicModeController, since it might use the old bridge
+				if (musicModeController != null) {
+					musicModeController.stop();
+					musicModeController.setMusicMode(null);
+				}
+
+				try {
+					bridge = new Bridge(settings.getBridgeIpAddress(), settings.getBridgePort(), false, 200); // TODO add timeout to settings
+					System.out.println("created new Bridge");
+				} catch (Exception ignored) {
+					settings.setHasBridge(false);
+				}
+			}
+
+			// setup MusicMode if musicModeController == null
+			if (settings.getHasMusicModeController() && (musicModeController == null)) {
+				musicModeController = new MusicModeController(null, new BeatDetector(120, settings.getActiveTargetDataLine())); // TODO add cooldown to settings
+				System.out.println("created new MusicModeController");
+			} else if (!settings.getHasMusicModeController()) {
+				// Delete the musicModeController if the user selected none as input
+				musicModeController = null;
+			}
+
+			return "successfully updated settings";
 		}
 
 		private Zone getZone (char nr){

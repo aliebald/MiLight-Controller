@@ -36,19 +36,34 @@ function setZone(zoneNr) {
 }
 
 function sendCommand(message) {
-	let url = "command=" + message + "&zone=" + zone;
-	console.log("sending", url);
-	let xhttp = new XMLHttpRequest();
-	xhttp.onreadystatechange = function() {
+	send("command=" + message + "&zone=" + zone);
+}
+
+function send(message) {
+	console.log("sending", message);
+	let xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200) {
-			document.getElementById("demo").innerHTML =
-			this.responseText;
+			document.getElementById("response").innerHTML = this.responseText;
 			console.log(this.responseText);
 		}
 	};
 
-	xhttp.open("GET", url, true);
-	xhttp.send(message);
+	xmlhttp.open("GET", message, true);
+	xmlhttp.send();
+}
+
+function sendAndExecute(message, func) {
+	console.log("sending: ", message);
+	let xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState === 4 && this.status === 200) {
+			func(this.responseText);
+		}
+	};
+
+	xmlhttp.open("GET", message, true);
+	xmlhttp.send(message);
 }
 
 // Slider functions
@@ -97,6 +112,52 @@ colorPicker.on('input:end', function(color) {
 	console.log("Color: red: " + color.red + ", green: " + color.green + ", blue: " + color.blue + ", 8 bit color: " + c + " = " + (c >>> 0).toString(2))
 	sendCommand("setColorTo:" + c);
 });
+
+// Settings
+let settings;
+sendAndExecute("settings.json", settingsReady)
+
+function settingsReady (set){
+	settings = JSON.parse(set);
+
+	document.getElementById('openBrowserOnStart').checked	= settings.openBrowserOnStart;
+	document.getElementById('activeTargetDataLine').value	= settings.activeTargetDataLine;
+	document.getElementById('bridgeIpAddress').value		= settings.bridgeIpAddress;
+	document.getElementById('bridgePort').valueAsNumber	= settings.bridgePort;
+
+	settings.possibleTargetDataLines.forEach(function (item, index) {
+		if(item === settings.activeTargetDataLine) {
+			document.getElementById('activeTargetDataLine').innerHTML = document.getElementById('activeTargetDataLine').innerHTML + "<option value=\"" + item + "\" selected>" + item + "</option>\n";
+		} else {
+			document.getElementById('activeTargetDataLine').innerHTML = document.getElementById('activeTargetDataLine').innerHTML + "<option value=\"" + item + "\">" + item + "</option>\n";
+		}
+	});
+}
+
+function applySettings() {
+	// update settings json
+	settings.activeTargetDataLine	= document.getElementById('activeTargetDataLine').value;
+	settings.openBrowserOnStart		= document.getElementById('openBrowserOnStart').checked;
+	settings.bridgeIpAddress		= document.getElementById('bridgeIpAddress').value;
+	settings.bridgePort				= document.getElementById('bridgePort').valueAsNumber;
+
+	// send settings json
+	console.log(settings);
+	let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+	xmlhttp.open("POST", "applySettings");
+	xmlhttp.setRequestHeader("Content-Type", "application/json;");
+	xmlhttp.send(JSON.stringify(settings));
+
+	// close the settings modal when updated successfully
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState === 4 && this.status === 200 && this.responseText === "successfully updated settings") {
+			$('#settingsModal').modal('hide');
+		}
+	};
+	// TODO better user feedback, more options, toasts
+}
+
+
 
 colorPicker.on('color:change', function(color) {
 	console.log(color.hexString);

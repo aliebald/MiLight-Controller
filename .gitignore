@@ -16,3 +16,6 @@ src/test/
 *.zip
 *.tar.gz
 *.rar
+
+# Settings File
+/src/main/resources/settings.json

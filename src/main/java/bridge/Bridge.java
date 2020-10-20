@@ -44,7 +44,7 @@ public class Bridge {
 	 * @param timeOut timeout in milliseconds for receiving answers from the bridge. A timeout of zero is interpreted as an infinite timeout.
 	 */
 	public Bridge (InetAddress ip, Integer port, Boolean keepAlive, int timeout) throws BridgeException {
-		System.out.println("Initializing Bridge");
+		System.out.println("Initializing Bridge at " + ip + ":" + port);
 		this.port = port;
 		this.sequentialByte = 1;
 		this.bridgeIp = ip;
