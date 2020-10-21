@@ -94,20 +94,26 @@ var colorPicker = new iro.ColorPicker("#picker", {
 });
 
 // Send a color change command when the user set a new color
-colorPicker.on(['input:end'], function(color) {
-	// Adjust the color a bit, since MiLight seems to have its colorscheme a bit off
-	let adjustment = 40;
-	let adjustedColor = color.hsl.h + adjustment;
-	if (adjustedColor > 360) {
-		adjustedColor -= 360;
+let lastUpdate = (new Date()).getTime();
+colorPicker.on('input:change', function (color){
+	let curTime = (new Date()).getTime();
+	if (curTime > lastUpdate + 150) {
+		lastUpdate = curTime;
+
+		// Adjust the color a bit, since MiLight seems to have its colorscheme a bit off
+		let adjustment = 40;
+		let adjustedColor = color.hsl.h + adjustment;
+		if (adjustedColor > 360) {
+			adjustedColor -= 360;
+		}
+
+		// scale down to 8 bit
+		let c = Math.round((adjustedColor) * (256 / 360));
+		sendCommand("setColorTo:" + c);
+
+		//TODO include saturation (when supported by the Bridge);
 	}
-
-	// scale down to 8 bit
-	let c = Math.round((adjustedColor) * (256 / 360));
-	sendCommand("setColorTo:" + c);
-
-	//TODO include saturation (when supported by the Bridge)
-});
+})
 
 // Settings
 let settings;
