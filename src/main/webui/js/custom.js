@@ -36,33 +36,22 @@ function setZone(zoneNr) {
 }
 
 function sendCommand(message) {
-	send("command=" + message + "&zone=" + zone);
+	send("command", "POST", "text/plain;", `command=${message}&zone=${zone}`, () => {});
 }
 
-function send(message) {
+function send(url, method, contentType, message, replyFunction) {
 	console.log("sending", message);
 	let xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState === 4 && this.status === 200) {
 			document.getElementById("response").innerHTML = this.responseText;
 			console.log(this.responseText);
+			replyFunction(this.responseText);
 		}
 	};
 
-	xmlhttp.open("GET", message, true);
-	xmlhttp.send();
-}
-
-function sendAndExecute(message, func) {
-	console.log("sending: ", message);
-	let xmlhttp = new XMLHttpRequest();
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200) {
-			func(this.responseText);
-		}
-	};
-
-	xmlhttp.open("GET", message, true);
+	xmlhttp.open(method, url, true);
+	xmlhttp.setRequestHeader("Content-Type", contentType);
 	xmlhttp.send(message);
 }
 
@@ -115,7 +104,7 @@ colorPicker.on('input:end', function(color) {
 
 // Settings
 let settings;
-sendAndExecute("settings.json", settingsReady)
+send("settings.json", "GET", "application/json;", "settings.json", settingsReady);
 
 function settingsReady (set){
 	settings = JSON.parse(set);
@@ -143,21 +132,16 @@ function applySettings() {
 
 	// send settings json
 	console.log(settings);
-	let xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-	xmlhttp.open("POST", "applySettings");
-	xmlhttp.setRequestHeader("Content-Type", "application/json;");
-	xmlhttp.send(JSON.stringify(settings));
 
-	// close the settings modal when updated successfully
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState === 4 && this.status === 200 && this.responseText === "successfully updated settings") {
+	// TODO better user feedback, more options, toasts
+	let onReply = function(response) {
+		if (response === "successfully updated settings") {
 			$('#settingsModal').modal('hide');
 		}
 	};
-	// TODO better user feedback, more options, toasts
+
+	send("applySettings", "POST", "application/json;", JSON.stringify(settings), onReply)
 }
-
-
 
 colorPicker.on('color:change', function(color) {
 	console.log(color.hexString);

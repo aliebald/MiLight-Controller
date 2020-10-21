@@ -92,7 +92,7 @@ public class HttpWebServer {
 				// select the correct response
 				if (!settings.getBridgeIpAddress().equals("")) {
 					System.out.println("request recognised as command");
-					response = handleCommand(request.getPath());
+					response = handleCommand(requestBody);
 				} else {
 					response = "ERROR: Please create a bridge";
 				}
@@ -136,7 +136,7 @@ public class HttpWebServer {
 		}
 
 		private boolean isCommand(String request) {
-			return request.startsWith("/command=");
+			return request.startsWith("/command");
 		}
 
 		/**
@@ -154,7 +154,7 @@ public class HttpWebServer {
 
 			// get command
 			int end = request.indexOf('&');
-			String command = request.substring(9, end);
+			String command = request.substring(8, end);
 			System.out.print("## Command: " + command + ", ");
 
 			// get zone
