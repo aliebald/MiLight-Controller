@@ -94,12 +94,19 @@ var colorPicker = new iro.ColorPicker("#picker", {
 });
 
 // Send a color change command when the user set a new color
-// TODO add saturation
-colorPicker.on('input:end', function(color) {
-	let c = (Math.floor((color.red / 32)) << 5) + (Math.floor((color.green / 32)) << 2) + Math.floor((color.blue / 64));
-	// Since MiLight uses 8-Bit color, convert to 8 bit. Warning: This is WIP, since it seems like MiLight does not follow the standard 8 bit color scheme
-	console.log("Color: red: " + color.red + ", green: " + color.green + ", blue: " + color.blue + ", 8 bit color: " + c + " = " + (c >>> 0).toString(2))
+colorPicker.on(['input:end'], function(color) {
+	// Adjust the color a bit, since MiLight seems to have its colorscheme a bit off
+	let adjustment = 40;
+	let adjustedColor = color.hsl.h + adjustment;
+	if (adjustedColor > 360) {
+		adjustedColor -= 360;
+	}
+
+	// scale down to 8 bit
+	let c = Math.round((adjustedColor) * (256 / 360));
 	sendCommand("setColorTo:" + c);
+
+	//TODO include saturation (when supported by the Bridge)
 });
 
 // Settings
@@ -142,11 +149,6 @@ function applySettings() {
 
 	send("applySettings", "POST", "application/json;", JSON.stringify(settings), onReply)
 }
-
-colorPicker.on('color:change', function(color) {
-	console.log(color.hexString);
-	document.getElementById("addColorBtn").style.background = color.hexString;
-});
 
 //  Mode selector tabs: build in modes
 document.getElementById("colorWheelTab").onclick = function () {

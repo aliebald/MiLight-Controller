@@ -167,7 +167,7 @@ public class HttpWebServer {
 				System.out.println("got: \n" + command);
 				int num;
 				try {
-					num = Integer.parseInt(command.substring(11, 13), 10);
+					num = Integer.parseInt(command.substring(11), 10);
 				} catch (NumberFormatException e){
 					return "invalid color";
 				}
