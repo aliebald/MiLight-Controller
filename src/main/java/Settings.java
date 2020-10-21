@@ -176,6 +176,9 @@ public class Settings {
 			// Checks if there is actually a bridge need to happen on initiation (in HttpServer)
 		}
 
+		// Update client settings
+		settings.put("clientSettings", in.get("clientSettings"));
+
 		saveSettings();
 	}
 

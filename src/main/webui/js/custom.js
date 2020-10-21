@@ -95,25 +95,31 @@ var colorPicker = new iro.ColorPicker("#picker", {
 
 // Send a color change command when the user set a new color
 let lastUpdate = (new Date()).getTime();
-colorPicker.on('input:change', function (color){
-	let curTime = (new Date()).getTime();
+colorPicker.on('input:change', function (color) {
+	const addCustomColorButton = document.getElementById("addCustomColorButton");
+	const curTime = (new Date()).getTime();
 	if (curTime > lastUpdate + 150) {
 		lastUpdate = curTime;
 
+		// Change color of addCustomColorButton
+		addCustomColorButton.style.background = color.hexString;
+		setColorTo(color.hsl.h, color.hsl.s, color.hsl.s);
+	}
+});
+
+// Takes the h, s and l values of a hsl color object and sends the converted 8 bit, MiLight compatible color, to the server
+function setColorTo(h, s, l) {
 		// Adjust the color a bit, since MiLight seems to have its colorscheme a bit off
-		let adjustment = 40;
-		let adjustedColor = color.hsl.h + adjustment;
+		let adjustedColor = h + 40;
 		if (adjustedColor > 360) {
 			adjustedColor -= 360;
 		}
 
-		// scale down to 8 bit
-		let c = Math.round((adjustedColor) * (256 / 360));
-		sendCommand("setColorTo:" + c);
+		// scale down to 8 bit and send
+		sendCommand("setColorTo:" + Math.round((adjustedColor) * (256 / 360)));
 
 		//TODO include saturation (when supported by the Bridge);
-	}
-})
+}
 
 // Settings
 let settings;
@@ -134,6 +140,8 @@ function settingsReady (set){
 			document.getElementById('activeTargetDataLine').innerHTML = document.getElementById('activeTargetDataLine').innerHTML + "<option value=\"" + item + "\">" + item + "</option>\n";
 		}
 	});
+
+	showCustomColors();
 }
 
 function applySettings() {
@@ -153,8 +161,52 @@ function applySettings() {
 		}
 	};
 
-	send("applySettings", "POST", "application/json;", JSON.stringify(settings), onReply)
+	send("applySettings", "POST", "application/json;", JSON.stringify(settings), onReply);
 }
+
+// Adds the current color of the colorPicker as a customColor to settings.clientSettings.customColors and sends them to the server
+function addCustomColor() {
+	// check if the exact color already exists
+	if(document.getElementById(`${colorPicker.color.hsl.h}${colorPicker.color.hsl.s}${colorPicker.color.hsl.l}`)) {
+		console.log("Custom color not added, because it already exists");
+	} else {
+		const customColor = {
+			"hsl": colorPicker.color.hsl,
+			"hex": colorPicker.color.hexString
+		};
+
+		console.log("adding", customColor);
+		settings.clientSettings.customColors.push(customColor);
+		applySettings();
+		addCustomColorBtn(customColor);
+	}
+}
+
+// Adds all custom colors saved in the settings file to the site
+function showCustomColors() {
+	const colorButtons = document.getElementById('colorButtons');
+	const insertIndex = colorButtons.innerHTML.indexOf("<!-- Add custom color button -->");
+	let customColorBtn = ""
+
+	// Add a button for every custom color
+	settings.clientSettings.customColors.forEach(function (item, index) {
+		console.log(item);
+		customColorBtn += `<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2"><button type="button" onclick="setColorTo(${item.hsl.h},${item.hsl.s},${item.hsl.l})" class="btn color" style="background: ${item.hex}" id="${item.hsl.h}${item.hsl.s}${item.hsl.l}"></button></div>`;
+	});
+
+	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
+}
+
+// Adds a single custom color button to the site
+function addCustomColorBtn(customColor) {
+	const colorButtons = document.getElementById('colorButtons');
+	const insertIndex = colorButtons.innerHTML.indexOf("<!-- Add custom color button -->");
+	let customColorBtn = `<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2"><button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l})" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button></div>`;
+
+	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
+}
+
+
 
 //  Mode selector tabs: build in modes
 document.getElementById("colorWheelTab").onclick = function () {
