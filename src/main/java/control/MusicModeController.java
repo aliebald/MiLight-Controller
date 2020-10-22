@@ -11,7 +11,7 @@ import main.java.musicModes.MusicMode;
  */
 public class MusicModeController implements Runnable {
 	private volatile MusicMode musicMode;
-	private BeatDetector beatDetector;
+	private volatile BeatDetector beatDetector;
 	private volatile boolean running;
 
 	public MusicModeController(MusicMode musicMode, BeatDetector beatDetector) {
@@ -55,5 +55,14 @@ public class MusicModeController implements Runnable {
 	 */
 	public synchronized void setMusicMode(MusicMode musicMode) {
 		this.musicMode = musicMode;
+	}
+
+	/**
+	 * Replaces the BeatDetector used.
+	 *
+	 * @param beatDetector new BeatDetector
+	 */
+	public synchronized void setBeatDetector(BeatDetector beatDetector) {
+		this.beatDetector = beatDetector;
 	}
 }

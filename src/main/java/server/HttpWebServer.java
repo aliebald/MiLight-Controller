@@ -323,8 +323,11 @@ public class HttpWebServer {
 		 * @return response String
 		 */
 		private String applySettings(String requestBody) {
+			String ret = "successfully updated settings";
+			String oldActiveTargetDataLine = settings.getActiveTargetDataLine();
 			String oldIp = settings.getBridgeIpAddress();
 			int oldPort = settings.getBridgePort();
+
 			try {
 				settings.updateSettings(requestBody);
 			} catch (Exception ignored) {
@@ -344,19 +347,22 @@ public class HttpWebServer {
 					System.out.println("created new Bridge");
 				} catch (Exception ignored) {
 					settings.setHasBridge(false);
+					ret = "ERROR: Failed to created new Bridge";
 				}
 			}
 
-			// setup MusicMode if musicModeController == null
-			if (settings.getHasMusicModeController() && (musicModeController == null)) {
-				musicModeController = new MusicModeController(null, new BeatDetector(120, settings.getActiveTargetDataLine())); // TODO add cooldown to settings
-				System.out.println("created new MusicModeController");
-			} else if (!settings.getHasMusicModeController()) {
-				// Delete the musicModeController if the user selected none as input
-				musicModeController = null;
+			if (musicModeController == null && !settings.getActiveTargetDataLine().equals("none")) {
+				// Setup new MusicModeController if necessary
+				musicModeController = new MusicModeController(null, new BeatDetector(120, settings.getActiveTargetDataLine()));
+				settings.setHasMusicModeController(true);
+
+			} else if (musicModeController != null && !oldActiveTargetDataLine.equals(settings.getActiveTargetDataLine())){
+				// Replace BeatDetector if activeTargetDataLine changed
+				musicModeController.stop();
+				musicModeController.setBeatDetector(new BeatDetector(120, settings.getActiveTargetDataLine()));
 			}
 
-			return "successfully updated settings";
+			return ret;
 		}
 
 		private Zone getZone (char nr){
