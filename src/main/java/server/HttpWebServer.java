@@ -12,6 +12,7 @@ import main.java.bridge.Zone;
 import main.java.control.MusicModeController;
 import main.java.musicModes.*;
 
+import javax.sound.sampled.LineUnavailableException;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -79,7 +80,11 @@ public class HttpWebServer {
 			}
 
 			if (!settings.getActiveTargetDataLine().equals("none")) {
-				musicModeController = new MusicModeController(null, new BeatDetector(100, settings.getActiveTargetDataLine()));
+				try {
+					musicModeController = new MusicModeController(null, new BeatDetector(100, settings.getActiveTargetDataLine()));
+				} catch (LineUnavailableException e) {
+					settings.resetActiveTargetDataLine();
+				}
 			}
 		}
 	}
@@ -339,7 +344,8 @@ public class HttpWebServer {
 		 * @return response String
 		 */
 		private String applySettings(String requestBody) {
-			String ret = "successfully updated settings";
+			boolean error = false;
+			String errorLog = "";
 			String oldActiveTargetDataLine = settings.getActiveTargetDataLine();
 			String oldIp = settings.getBridgeIpAddress();
 			int oldPort = settings.getBridgePort();
@@ -363,22 +369,36 @@ public class HttpWebServer {
 					System.out.println("created new Bridge");
 				} catch (Exception ignored) {
 					settings.setHasBridge(false);
-					ret = "ERROR: Failed to created new Bridge";
+					errorLog = "ERROR: Failed to created new Bridge.";
 				}
 			}
 
 			if (musicModeController == null && !settings.getActiveTargetDataLine().equals("none")) {
 				// Setup new MusicModeController if necessary
-				musicModeController = new MusicModeController(null, new BeatDetector(120, settings.getActiveTargetDataLine()));
+				try {
+					musicModeController = new MusicModeController(null, new BeatDetector(120, settings.getActiveTargetDataLine()));
+				} catch (LineUnavailableException e) {
+					settings.resetActiveTargetDataLine();
+					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
+				}
 				settings.setHasMusicModeController(true);
 
 			} else if (musicModeController != null && !oldActiveTargetDataLine.equals(settings.getActiveTargetDataLine())){
 				// Replace BeatDetector if activeTargetDataLine changed
 				musicModeController.stop();
-				musicModeController.setBeatDetector(new BeatDetector(120, settings.getActiveTargetDataLine()));
+				try {
+					musicModeController.setBeatDetector(new BeatDetector(120, settings.getActiveTargetDataLine()));
+				} catch (LineUnavailableException e) {
+					settings.resetActiveTargetDataLine();
+					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
+				}
 			}
 
-			return ret;
+			if (error) {
+				return errorLog;
+			} else {
+				return "successfully updated settings";
+			}
 		}
 
 		private Zone getZone (char nr){

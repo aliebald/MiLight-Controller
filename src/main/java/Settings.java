@@ -203,12 +203,25 @@ public class Settings {
 	/**
 	 * Resets current setting to default settings
 	 *
-	 * @throws IOException throws an IOException if reading the file fails
+	 * @throws IOException throws an IOException if reading or writing the file fails
 	 */
 	public void setToDefaultSettings() throws IOException {
 		settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "defaultSettings.json"))));
 		updatePossibleTargetDataLines();
 		saveSettings();
+	}
+
+	/**
+	 * Resets the activeTargetDataLine to none and saves the changes
+	 */
+	public void resetActiveTargetDataLine() {
+		setActiveTargetDataLine("none");
+		try {
+			saveSettings();
+		} catch (IOException e) {
+			// TODO Handle IOException
+			e.printStackTrace();
+		}
 	}
 
 	/**

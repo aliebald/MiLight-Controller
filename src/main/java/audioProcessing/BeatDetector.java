@@ -2,6 +2,7 @@ package main.java.audioProcessing;
 
 import javax.sound.sampled.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -13,8 +14,8 @@ import java.util.LinkedList;
 public class BeatDetector {
 	private static final float sampleRate = 44100;
 	private static final int sampleSizeInBits = 16;
-	private static final int channels = 1;
-	private static final AudioFormat audioFormat = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, true);
+	private static int channels = 1;
+	private static AudioFormat audioFormat = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, true);
 
 	private final LinkedList <Long> historyBuffer = new LinkedList<>();
 	private final Normalizer normalizer = new Normalizer();;
@@ -29,19 +30,22 @@ public class BeatDetector {
 	private int beatsBefore = 0;
 
 	// variables that change the bpm calculation
-	private final long historyBufferSize = 43 * 2;
-	private final int bufferSize = 1024;
-	private byte[] buffer = new byte[bufferSize];
+	private long historyBufferSize = 43 * 2;
+	private int bufferSize = 1024;
+	private byte[] buffer;
 
 	/**
-	 * @param targetDataLine TODO
+	 * @param targetDataLine The name of the TargetDataLine that should be opened. Get all possible TargetDataLines using {@link #getPossibleTargetDataLines()}
 	 *
 	 * @param cooldown minimum time in milliseconds between beats.
 	 *                 A high value can lead to skipped beats while a low value may lead to the same beat being detected twice.
 	 *                 Setting this to a higher value reduces load on the network, Bridge and controllers. A good starting point
 	 *                 could be between 80-200, but values outside of this range can make sense too.
+	 *
+	 * @throws LineUnavailableException Throws an LineUnavailableException if the selected line is not supported in either mono or stereo, 16bit, and 44100Hz.
+	 *
 	 */
-	public BeatDetector(int cooldown, String targetDataLine) {
+	public BeatDetector(int cooldown, String targetDataLine) throws LineUnavailableException {
 		lastBeat = System.currentTimeMillis();
 		this.cooldown = cooldown;
 		if (targetDataLine != null) {
@@ -52,13 +56,21 @@ public class BeatDetector {
 
 		// Open and start the TargetDataLine
 		try {
+			// Try opening line in mono
 			line.open(audioFormat);
-		} catch (LineUnavailableException e) {
-			// TODO Handle Exception
-			e.printStackTrace();
-			return;
+		} catch (LineUnavailableException ignored) {
+			// Try opening line in stereo format
+			System.out.println("Failed to open line in mono channel, trying stereo");
+			channels = 2;
+			audioFormat = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, true);
+			historyBufferSize *= 2;
+			bufferSize *= 2;
+
+			// Try again, throws an exception if this fails too.
+			line.open(audioFormat);
 		}
 
+		buffer = new byte[bufferSize];
 		line.start();
 	}
 
@@ -67,7 +79,7 @@ public class BeatDetector {
 	 *
 	 * @param cooldown
 	 */
-	public BeatDetector(int cooldown) {
+	public BeatDetector(int cooldown) throws LineUnavailableException {
 		this(cooldown, null);
 	}
 

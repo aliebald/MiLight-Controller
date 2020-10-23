@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.scene.*;
 import main.java.musicModes.CyclicLights;
 
+import javax.sound.sampled.LineUnavailableException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -62,7 +63,7 @@ public class Display extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws InterruptedException {
+	public void start(Stage primaryStage) throws InterruptedException, LineUnavailableException {
 		primaryStage.setTitle("Graph");
 
 		xAxis = new CategoryAxis();
