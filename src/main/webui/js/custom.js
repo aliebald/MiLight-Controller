@@ -163,7 +163,8 @@ function applySettings() {
 			// Cut off error message and update settings
 			const endError = response.indexOf("ERROR-END") + 9;
 			console.log(response);
-			settingsReady(response.slice(endError))
+			deleteCustomColors();
+			settingsReady(response.slice(endError));
 
 			// TODO Error toast
 		} else {
