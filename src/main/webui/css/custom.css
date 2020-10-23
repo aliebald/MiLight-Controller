@@ -118,6 +118,10 @@ input[type=number]:hover {
 	height: 50px;
 }
 
+.resetBtn:hover {
+	background: red;
+}
+
 .addCustomColorButton {
 	font-size: 30px;
 	vertical-align: center;

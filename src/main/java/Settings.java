@@ -20,6 +20,12 @@ public class Settings {
 	private JSONObject settings;
 	private String path = "D:\\Intellij Workspace\\MiLight Controller\\src\\main\\resources\\";
 
+	/**
+	 * Construct a new Settings object which handles server and client settings.
+	 * Will try to load custom settings. If none are found it will load the default settings
+	 *
+	 * @throws IOException Throws an if an error occurs when reading the settings
+	 */
 	public Settings() throws IOException {
 		try {
 			settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "settings.json"))));
@@ -199,7 +205,7 @@ public class Settings {
 	 *
 	 * @throws IOException throws an IOException if reading the file fails
 	 */
-	private void setToDefaultSettings() throws IOException {
+	public void setToDefaultSettings() throws IOException {
 		settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "defaultSettings.json"))));
 		updatePossibleTargetDataLines();
 	}

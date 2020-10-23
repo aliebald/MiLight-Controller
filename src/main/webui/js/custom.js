@@ -133,11 +133,14 @@ function settingsReady (set){
 	document.getElementById('bridgeIpAddress').value		= settings.bridgeIpAddress;
 	document.getElementById('bridgePort').valueAsNumber	= settings.bridgePort;
 
+	const dropdown = document.getElementById('activeTargetDataLine');
+	dropdown.innerHTML = "";
+
 	settings.possibleTargetDataLines.forEach(function (item, index) {
 		if(item === settings.activeTargetDataLine) {
-			document.getElementById('activeTargetDataLine').innerHTML = document.getElementById('activeTargetDataLine').innerHTML + "<option value=\"" + item + "\" selected>" + item + "</option>\n";
+			dropdown.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
 		} else {
-			document.getElementById('activeTargetDataLine').innerHTML = document.getElementById('activeTargetDataLine').innerHTML + "<option value=\"" + item + "\">" + item + "</option>\n";
+			dropdown.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
 		}
 	});
 
@@ -197,6 +200,14 @@ function showCustomColors() {
 	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
 }
 
+// removes all custom colors
+function deleteCustomColors() {
+	const startIndex = colorButtons.innerHTML.indexOf("<!-- custom colors -->") + 22;
+	const endIndex = colorButtons.innerHTML.indexOf("<!-- Add custom color button -->");
+
+	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, startIndex), colorButtons.innerHTML.slice(endIndex)].join('');
+}
+
 // Adds a single custom color button to the site
 function addCustomColorBtn(customColor) {
 	const colorButtons = document.getElementById('colorButtons');
@@ -206,7 +217,18 @@ function addCustomColorBtn(customColor) {
 	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
 }
 
+// Reset all settings to default
+function resetSettings() {
+	if (window.confirm("Do you really want to reset all settings to default?")) {
+		const onReply = function(response) {
+			deleteCustomColors();
+			settingsReady(response);
+		};
 
+		// Tell the server to reset the settings and get the default settings
+		send("resetSettings", "GET", "text/plain;", "", onReply);
+	}
+}
 
 //  Mode selector tabs: build in modes
 document.getElementById("colorWheelTab").onclick = function () {

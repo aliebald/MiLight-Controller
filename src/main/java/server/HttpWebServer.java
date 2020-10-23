@@ -15,10 +15,7 @@ import main.java.musicModes.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,13 +47,7 @@ public class HttpWebServer {
 	 * Start the website server
 	 */
 	public void start() throws IOException, BridgeException {
-		if (!settings.getBridgeIpAddress().equals("")) {
-			bridge = new Bridge(settings.getBridgeIpAddress(), settings.getBridgePort(), false, 250);
-
-			if (!settings.getActiveTargetDataLine().equals("none")) {
-				musicModeController = new MusicModeController(null, new BeatDetector(100, settings.getActiveTargetDataLine()));
-			}
-		}
+		setupBridgeAndMusicModeController();
 		InetAddress address = InetAddress.getLocalHost();
 
 		HttpServer server = HttpServer.create(new InetSocketAddress(address, port), 0);
@@ -73,6 +64,24 @@ public class HttpWebServer {
 
 		System.out.println("IP Address of http server:- " + address.getHostAddress() + ":" + port);
 		System.out.println("Host Name:- " + address.getHostName());
+	}
+
+	private void setupBridgeAndMusicModeController() {
+		if (!settings.getBridgeIpAddress().equals("")) {
+			try {
+				bridge = new Bridge(settings.getBridgeIpAddress(), settings.getBridgePort(), false, 250);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				// TODO Exception Handling
+			} catch (BridgeException e) {
+				e.printStackTrace();
+				// TODO Exception Handling
+			}
+
+			if (!settings.getActiveTargetDataLine().equals("none")) {
+				musicModeController = new MusicModeController(null, new BeatDetector(100, settings.getActiveTargetDataLine()));
+			}
+		}
 	}
 
 	private class Handler implements HttpHandler {
@@ -120,6 +129,16 @@ public class HttpWebServer {
 						break;
 					} case "/applySettings": {
 						response = applySettings(requestBody);
+						break;
+					} case "/resetSettings": {
+						settings.setToDefaultSettings();
+						// Reset Bridge & MusicModeController
+						bridge = null;
+						musicModeController = null;
+						setupBridgeAndMusicModeController();
+
+						response = settings.getSettings();
+						System.out.println("	return set to defaultSettings.json");
 						break;
 					}
 					default: {
