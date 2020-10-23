@@ -97,65 +97,62 @@ public class HttpWebServer {
 			String response, requestBody = getRequestBody(t);
 			System.out.println("requested: " + request + ", RequestMethod: " + t.getRequestMethod() + ", RequestBody: " + requestBody);
 
-			if (isCommand(request.getPath())){
-				// select the correct response
-				if (!settings.getBridgeIpAddress().equals("")) {
+			switch (request.getPath()) {
+				case "/command": {
+					// select the correct response
 					System.out.println("request recognised as command");
-					response = handleCommand(requestBody);
-				} else {
-					response = "ERROR: Please create a bridge";
+					if (!settings.getBridgeIpAddress().equals("")) {
+						response = handleCommand(requestBody);
+					} else {
+						response = "ERROR: Please create a bridge";
+					}
+					break;
 				}
-			} else {
-				switch (request.getPath()) {
-					case "/": {
-						response = site;
-						System.out.println("	set the response to site");
-						break;
-					} case "/css/custom.css": {
-						response = customCSS;
-						System.out.println("	set the response to customCSS");
-						break;
-					} case "/js/custom.js": {
-						response = customJs;
-						System.out.println("	set the response to custom.js");
-						break;
-					} case "/favicon.ico": {
-						response = "";
-						System.out.println("	return empty String. No favicon.ico right now");
-						break;
-					} case "/settings.json": {
-						response = settings.getSettings();
-						System.out.println("	return set to settings.json");
-						break;
-					} case "/applySettings": {
-						response = applySettings(requestBody);
-						break;
-					} case "/resetSettings": {
-						settings.setToDefaultSettings();
-						// Reset Bridge & MusicModeController
-						bridge = null;
-						musicModeController = null;
-						setupBridgeAndMusicModeController();
+				case "/": {
+					response = site;
+					System.out.println("	set the response to site");
+					break;
+				} case "/css/custom.css": {
+					response = customCSS;
+					System.out.println("	set the response to customCSS");
+					break;
+				} case "/js/custom.js": {
+					response = customJs;
+					System.out.println("	set the response to custom.js");
+					break;
+				} case "/favicon.ico": {
+					response = "";
+					System.out.println("	return empty String. No favicon.ico right now");
+					break;
+				} case "/settings.json": {
+					response = settings.getSettings();
+					System.out.println("	return set to settings.json");
+					break;
+				} case "/applySettings": {
+					response = applySettings(requestBody);
+					break;
+				} case "/resetSettings": {
+					settings.setToDefaultSettings();
+					// Reset Bridge & MusicModeController
+					bridge = null;
+					musicModeController = null;
+					setupBridgeAndMusicModeController();
 
-						response = settings.getSettings();
-						System.out.println("	return set to defaultSettings.json");
-						break;
-					}
-					default: {
-						System.out.println("	return empty String. (default case, request unknown)");
-						response = "";
-					}
+					response = settings.getSettings();
+					System.out.println("	return set to defaultSettings.json");
+					break;
+				}
+				default: {
+					System.out.println("	return empty String. (default case, request unknown)");
+					response = "";
 				}
 			}
+
 			t.sendResponseHeaders(200, response.getBytes().length);
 			OutputStream os = t.getResponseBody();
 			os.write(response.getBytes());
 			os.close();
 			System.out.println("############################################");
-		}
-
-		private boolean isCommand(String request) {
-			return request.startsWith("/command");
 		}
 
 		/**
