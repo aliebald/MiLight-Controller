@@ -208,6 +208,7 @@ public class Settings {
 	public void setToDefaultSettings() throws IOException {
 		settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "defaultSettings.json"))));
 		updatePossibleTargetDataLines();
+		saveSettings();
 	}
 
 	/**
