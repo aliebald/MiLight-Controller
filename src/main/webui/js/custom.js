@@ -134,11 +134,11 @@ function settingsReady (set){
 	document.getElementById('bridgePort').valueAsNumber	= settings.bridgePort;
 
 	const dropdown = document.getElementById('activeTargetDataLine');
-	dropdown.innerHTML = "";
+	dropdown.innerHTML = "<option value=\"none\">none</option>\n";
 
 	settings.possibleTargetDataLines.forEach(function (item, index) {
 		if(item === settings.activeTargetDataLine) {
-			dropdown.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
+			dropdown.innerHTML += `<option value=\"${item}\" selected>${item}</option>\n`;
 		} else {
 			dropdown.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
 		}
@@ -159,8 +159,17 @@ function applySettings() {
 
 	// TODO better user feedback, more options, toasts
 	let onReply = function(response) {
-		if (response === "successfully updated settings") {
+		if (response.startsWith("ERROR")) {
+			// Cut off error message and update settings
+			const endError = response.indexOf("ERROR-END") + 9;
+			console.log(response);
+			settingsReady(response.slice(endError))
+
+			// TODO Error toast
+		} else {
 			$('#settingsModal').modal('hide');
+
+			// TODO Success toast
 		}
 	};
 

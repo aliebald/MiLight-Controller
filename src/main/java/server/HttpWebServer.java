@@ -344,7 +344,6 @@ public class HttpWebServer {
 		 * @return response String
 		 */
 		private String applySettings(String requestBody) {
-			boolean error = false;
 			String errorLog = "";
 			String oldActiveTargetDataLine = settings.getActiveTargetDataLine();
 			String oldIp = settings.getBridgeIpAddress();
@@ -394,10 +393,10 @@ public class HttpWebServer {
 				}
 			}
 
-			if (error) {
-				return errorLog;
+			if (errorLog.equals("")) {
+				return settings.getSettings();
 			} else {
-				return "successfully updated settings";
+				return errorLog + "ERROR-END" + settings.getSettings();
 			}
 		}
 
