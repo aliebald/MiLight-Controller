@@ -296,6 +296,14 @@ public class HttpWebServer {
 					bridge.turnOff(zone);
 					return "turned off";
 				}
+				case "decreaseSpeed": {
+					bridge.decreaseSpeed(zone);
+					break;
+				}
+				case "increaseSpeed": {
+					bridge.increaseSpeed(zone);
+					break;
+				}
 				case "setColorRed": {
 					bridge.setColorToRed(zone);
 					return "Changed color to red";

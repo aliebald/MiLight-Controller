@@ -229,6 +229,11 @@
 					<div class="tab-content" id="pills-tabContent">
 						<!-- Content for buildIn modes -->
 						<div class="container modeTabs tab-pane fade show textDark active" id="buildInModes" role="tabpanel" aria-labelledby="buildInModes-tab">
+							<div class="row justify-content-center py-2">
+								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('decreaseSpeed')">&nbsp;&nbsp;-&nbsp;&nbsp;</button>
+								<span class="align-middle py-2">&nbsp;&nbsp;Speed&nbsp;&nbsp;</span>
+								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('increaseSpeed')">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+							</div>
 							<div class="row">
 								<div class="col-12">
 									<div class="list-group modesList" id="buildInModes-tab-tabs" role="tablist">
