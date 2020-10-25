@@ -259,5 +259,24 @@ input[type=number]:hover {
 	color: black;
 }
 
+.toastContainer {
+	z-index: 2;
+	position: relative;
+	display: flex;
+	justify-content: center;
+}
+
+.toastInner {
+	position: absolute;
+	top: 0;
+}
+
+.success {
+	color: green;
+}
+
+.error {
+	color: red;
+}
 
 

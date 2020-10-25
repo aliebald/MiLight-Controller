@@ -157,7 +157,7 @@ function applySettings() {
 	// send settings json
 	console.log(settings);
 
-	// TODO better user feedback, more options, toasts
+	// TODO better user feedback, more options
 	let onReply = function(response) {
 		if (response.startsWith("ERROR")) {
 			// Cut off error message and update settings
@@ -166,11 +166,11 @@ function applySettings() {
 			deleteCustomColors();
 			settingsReady(response.slice(endError));
 
-			// TODO Error toast
+			document.getElementById('saveSettingsErrorMessage').innerHTML = response.slice(0, endError - 9);
+			$('#saveSettingsError').toast('show');
 		} else {
 			$('#settingsModal').modal('hide');
-
-			// TODO Success toast
+			$('#saveSettingsSuccess').toast('show');
 		}
 	};
 
