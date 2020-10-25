@@ -290,7 +290,7 @@ document.getElementById("sirenLightsTab").onclick = function () {
 	sendCommand("setMode:MSiren");
 }
 
-
+$('.toast').toast("show");
 
 
 

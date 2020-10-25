@@ -260,7 +260,7 @@ input[type=number]:hover {
 }
 
 .toastContainer {
-	z-index: 2;
+	z-index: 1;
 	position: relative;
 	display: flex;
 	justify-content: center;
