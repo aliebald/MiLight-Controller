@@ -224,6 +224,10 @@ public class HttpWebServer {
 							musicModeController.setMusicMode(new CyclicLights(bridge));
 							break;
 						}
+						case "MCyclicMultipleColors": {
+							musicModeController.setMusicMode(new CyclicLightsMultipleColors(bridge));
+							break;
+						}
 						case "MFlashing": {
 							musicModeController.setMusicMode(new FlashingLights(bridge));
 							break;
