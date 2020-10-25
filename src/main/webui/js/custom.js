@@ -274,6 +274,10 @@ document.getElementById("cyclicLightsTab").onclick = function () {
 	sendCommand("setMode:MCyclic");
 }
 
+document.getElementById("cyclicLightsMCTab").onclick = function () {
+	sendCommand('setMode:MCyclicMultipleColors');
+}
+
 document.getElementById("flashingLightsTab").onclick = function () {
 	sendCommand("setMode:MFlashing");
 }
@@ -290,12 +294,12 @@ document.getElementById("sirenLightsTab").onclick = function () {
 	sendCommand("setMode:MSiren");
 }
 
+// TODO find a way around this
+// show and discard toasts to avoid them blocking on/off buttons, even though they are invisible
 $('.toast').toast("show");
-
-
-
-
-
+setTimeout(function() {
+	$('.toast .close').click();
+}, 150);
 
 
 
