@@ -66,7 +66,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary resetBtn" onclick="resetSettings()">&nbsp;Reset&nbsp;</button>
+						<button type="button" class="btn btn-danger" onclick="resetSettings()">&nbsp;Reset&nbsp;</button>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;Close&nbsp;</button>
 						<button type="button" class="btn btn-primary" onclick="applySettings()">&nbsp;Save changes&nbsp;</button>
 					</div>
@@ -129,6 +129,7 @@
 		<div class="py-3 container-fluid ml-3 mr-3">
 			<div class="row topBar">
 				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
+					<!--
 					<span class="textDark pr-2">
 						Speed:
 					</span>
@@ -139,6 +140,7 @@
 							set	
 						</button>
 					</div>
+					-->
 				</div>
 				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 d-flex align-items-center justify-content-center textDark my-1">
 					<span class="mr-1">
@@ -302,14 +304,16 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-12 pt-2 pb-3">
-								<div class="tab-content" id="nav-musicModesTabContent">
-									<div class="tab-pane fade" id="cyclicLightsInfo" 		role="tabpanel" aria-labelledby="cyclicLightsTab">Cyclic Light</div>
-									<div class="tab-pane fade" id="cyclicLightsMCInfo" 		role="tabpanel" aria-labelledby="cyclicLightsMCTab">Cyclic Light Multiple Colors</div>
-									<div class="tab-pane fade" id="flashingLightsInfo" 		role="tabpanel" aria-labelledby="flashingLightsTab">Flashing Lights</div>
-									<div class="tab-pane fade" id="pulseLightInfo" 			role="tabpanel" aria-labelledby="pulseLightTab">Pulse Light</div>
-									<div class="tab-pane fade" id="sequentialLightsInfo" 	role="tabpanel" aria-labelledby="sequentialLightsTab">Sequential Lights</div>
-									<div class="tab-pane fade" id="sirenLightsInfo" 		role="tabpanel" aria-labelledby="sirenLightsTab">Siren Lights</div>
+							<div class="row">
+								<div class="col-12 pt-2 pb-3">
+									<div class="tab-content" id="nav-musicModesTabContent">
+										<div class="tab-pane fade" id="cyclicLightsInfo" 		role="tabpanel" aria-labelledby="cyclicLightsTab">Cyclic Light</div>
+										<div class="tab-pane fade" id="cyclicLightsMCInfo" 		role="tabpanel" aria-labelledby="cyclicLightsMCTab">Cyclic Light Multiple Colors</div>
+										<div class="tab-pane fade" id="flashingLightsInfo" 		role="tabpanel" aria-labelledby="flashingLightsTab">Flashing Lights</div>
+										<div class="tab-pane fade" id="pulseLightInfo" 			role="tabpanel" aria-labelledby="pulseLightTab">Pulse Light</div>
+										<div class="tab-pane fade" id="sequentialLightsInfo" 	role="tabpanel" aria-labelledby="sequentialLightsTab">Sequential Lights</div>
+										<div class="tab-pane fade" id="sirenLightsInfo" 		role="tabpanel" aria-labelledby="sirenLightsTab">Siren Lights</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -323,7 +327,7 @@
 		</div>
 	</body>
 
-	<!-- Fontawesome: using a local distribution -->
+	<!-- Fontawesome -->
 	<script src="https://kit.fontawesome.com/233310fc18.js" crossorigin="anonymous"></script>
 	<!-- Bootstrap -->
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

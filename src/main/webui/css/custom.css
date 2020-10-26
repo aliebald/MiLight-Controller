@@ -118,28 +118,24 @@ input[type=number]:hover {
 	height: 50px;
 }
 
-.resetBtn:hover {
-	background: red;
-}
-
 .addCustomColorButton {
 	font-size: 30px;
 	vertical-align: center;
 }
 
-.speedNumber {
+.numField {
 	border: 1px;
 	border-radius: 5px;
 	outline: none;
 }
 
-.speedSlider {
+.slider {
 	width: 80%;
 	height: 15px;
 	border-radius: 10px;
 }
 
-.speedSlider,
+.slider,
 .brightnessSlider {
 	-webkit-appearance: none;
 	background: #bfbfbf; /* slider background color */
@@ -149,19 +145,19 @@ input[type=number]:hover {
 	transition: opacity .2s;
 }
 
-.speedSlider:hover,
+.slider:hover,
 .brightnessSlider:hover {
 	opacity: 1;
 }
 
-.speedSlider::-webkit-slider-thumb,
+.slider::-webkit-slider-thumb,
 .brightnessSlider::-webkit-slider-thumb{
 	-webkit-appearance: none;
 	appearance: none;
 	background: #000000; /* color of slider handle */
 }
 
-.speedSlider::-moz-range-thumb,
+.slider::-moz-range-thumb,
 .brightnessSlider::-moz-range-thumb {
 	width: 25px;
 	height: 25px;
@@ -170,7 +166,7 @@ input[type=number]:hover {
 	border-radius: 50%;
 }
 
-.speedSlider::-webkit-slider-thumb {
+.slider::-webkit-slider-thumb {
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
