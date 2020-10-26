@@ -1,6 +1,5 @@
-var zone = 0;
-var speed = 100;
-var brightness = 80;
+let zone = 0;
+let brightness = 80;
 
 function toggleNav() {
 	let nav = document.getElementById("sidenav");
@@ -56,22 +55,40 @@ function send(url, method, contentType, message, replyFunction) {
 }
 
 // Slider functions
-const slider = document.getElementById("speedSlider");
-const number = document.getElementById("speedNumber");
+const beatCooldownSlider = document.getElementById("beatCooldownSlider");
+const beatCooldownNum = document.getElementById("beatCooldownNum");
 const brightnessSlider = document.getElementById("brightnessSlider");
 
 // Update the current slider value (each time you drag the slider handle)
-slider.oninput = function() {
-  number.value = this.value;
-  speed = this.value;
-  console.log("oninput called on slider: ", this.value, speed);
-}
+beatCooldownSlider.addEventListener("input", function() {
+	beatCooldownNum.value = this.value;
+});
 
-number.oninput = function() {
-  slider.value = this.value;
-  speed = this.value;
-  console.log("oninput called on number: ", this.value, speed);
-}
+beatCooldownSlider.addEventListener("change", function() {
+	console.log("# onended called on beatCooldownSlider: ", this.value);
+	settings.beatCooldown = this.value;
+	applySettings();
+});
+
+beatCooldownNum.addEventListener("input", function() {
+	if (this.value > 1000) {
+		beatCooldownSlider.value = 1000;
+		this.value = 1000;
+	} else if (this.value < 0) {
+		beatCooldownSlider.value = 0;
+		this.value = 0;
+	} else if (this.value === "") {
+		beatCooldownSlider.value = 0;
+	} else {
+		beatCooldownSlider.value = this.value;
+	}
+});
+
+beatCooldownNum.addEventListener("change", function() {
+	console.log("# onended called on beatCooldownNum: ", this.value);
+	settings.beatCooldown = this.value;
+	applySettings();
+});
 
 brightnessSlider.onmouseup = function () {
 	brightness = this.value; // TODO Required?
@@ -80,7 +97,7 @@ brightnessSlider.onmouseup = function () {
 }
 
 // Color picker logic
-var colorPicker = new iro.ColorPicker("#picker", {
+const colorPicker = new iro.ColorPicker("#picker", {
 	color: "#ff0000",
 	width: 300,
 	borderWidth: 3,
@@ -132,6 +149,9 @@ function settingsReady (set){
 	document.getElementById('activeTargetDataLine').value	= settings.activeTargetDataLine;
 	document.getElementById('bridgeIpAddress').value		= settings.bridgeIpAddress;
 	document.getElementById('bridgePort').valueAsNumber	= settings.bridgePort;
+
+	beatCooldownSlider.value	= settings.beatCooldown;
+	beatCooldownNum.value		= settings.beatCooldown;
 
 	const dropdown = document.getElementById('activeTargetDataLine');
 	dropdown.innerHTML = "<option value=\"none\">none</option>\n";

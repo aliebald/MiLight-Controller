@@ -81,7 +81,7 @@ public class HttpWebServer {
 
 			if (!settings.getActiveTargetDataLine().equals("none")) {
 				try {
-					musicModeController = new MusicModeController(null, new BeatDetector(100, settings.getActiveTargetDataLine()));
+					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
 				}
@@ -360,6 +360,7 @@ public class HttpWebServer {
 			String oldActiveTargetDataLine = settings.getActiveTargetDataLine();
 			String oldIp = settings.getBridgeIpAddress();
 			int oldPort = settings.getBridgePort();
+			int oldBeatCooldown = settings.getBeatCooldown();
 
 			try {
 				settings.updateSettings(requestBody);
@@ -387,7 +388,7 @@ public class HttpWebServer {
 			if (musicModeController == null && !settings.getActiveTargetDataLine().equals("none")) {
 				// Setup new MusicModeController if necessary
 				try {
-					musicModeController = new MusicModeController(null, new BeatDetector(120, settings.getActiveTargetDataLine()));
+					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
 					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
@@ -398,11 +399,16 @@ public class HttpWebServer {
 				// Replace BeatDetector if activeTargetDataLine changed
 				musicModeController.stop();
 				try {
-					musicModeController.setBeatDetector(new BeatDetector(120, settings.getActiveTargetDataLine()));
+					musicModeController.setBeatDetector(new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
 					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
 				}
+			}
+
+			// check if BeatCooldown changed
+			if (settings.getBeatCooldown() != oldBeatCooldown) {
+				musicModeController.getBeatDetector().setCooldown(settings.getBeatCooldown());
 			}
 
 			if (errorLog.equals("")) {

@@ -170,6 +170,7 @@ public class Settings {
 		setBridgeIpAddress((String) in.get("bridgeIpAddress"));
 		setOpenBrowserOnStart(in.getBoolean("openBrowserOnStart"));
 		setBridgePort((Integer) in.getNumber("bridgePort"));
+		setBeatCooldown(in.getInt("beatCooldown"));
 
 		// insert TargetDataLine name and update hasMusicModeController if possible
 		if (setActiveTargetDataLine((String) in.get("activeTargetDataLine")) && !in.get("activeTargetDataLine").equals("none")) {
@@ -233,5 +234,19 @@ public class Settings {
 			possibleTargetDataLines.put(line);
 		}
 		settings.put("possibleTargetDataLines", possibleTargetDataLines);
+	}
+
+	/**
+	 * @return returns beatCooldown
+	 */
+	public int getBeatCooldown() {
+		return settings.getInt("beatCooldown");
+	}
+
+	/**
+	 * @param beatCooldown beatCooldown intended for BeatDetector
+	 */
+	public void setBeatCooldown(int beatCooldown) {
+		settings.put("beatCooldown", beatCooldown);
 	}
 }

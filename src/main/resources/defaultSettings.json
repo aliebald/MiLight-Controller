@@ -6,6 +6,7 @@
 	"activeTargetDataLine": "none",
 	"bridgeIpAddress": "192.168.0.52",
 	"bridgePort": 5987,
+	"beatCooldown": 100,
 
 	"clientSettings": {
 		"customColors": []

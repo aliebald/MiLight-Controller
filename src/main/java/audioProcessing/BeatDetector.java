@@ -111,6 +111,7 @@ public class BeatDetector {
 	 * @param cooldown new cooldown in milliseconds
 	 */
 	public void setCooldown(long cooldown) {
+		System.out.println("SET COOLDOWN TO " + cooldown);
 		this.cooldown = cooldown;
 	}
 
@@ -381,4 +382,6 @@ public class BeatDetector {
 		}
 		return true;
 	}
+
+
 }

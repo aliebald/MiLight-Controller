@@ -65,4 +65,11 @@ public class MusicModeController implements Runnable {
 	public synchronized void setBeatDetector(BeatDetector beatDetector) {
 		this.beatDetector = beatDetector;
 	}
+
+	/**
+	 * Returns the BeatDetector used.
+	 */
+	public synchronized BeatDetector getBeatDetector() {
+		return beatDetector;
+	}
 }
