@@ -202,6 +202,7 @@ function addCustomColor() {
 	// check if the exact color already exists
 	if(document.getElementById(`${colorPicker.color.hsl.h}${colorPicker.color.hsl.s}${colorPicker.color.hsl.l}`)) {
 		console.log("Custom color not added, because it already exists");
+		// TODO Toast
 	} else {
 		const customColor = {
 			"hsl": colorPicker.color.hsl,
@@ -224,7 +225,7 @@ function showCustomColors() {
 	// Add a button for every custom color
 	settings.clientSettings.customColors.forEach(function (item, index) {
 		console.log(item);
-		customColorBtn += `<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2"><button type="button" onclick="setColorTo(${item.hsl.h},${item.hsl.s},${item.hsl.l})" class="btn color" style="background: ${item.hex}" id="${item.hsl.h}${item.hsl.s}${item.hsl.l}"></button></div>`;
+		customColorBtn += `<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 py-2 colorBtn"><button type="button" onclick="setColorTo(${item.hsl.h},${item.hsl.s},${item.hsl.l})" class="btn color" style="background: ${item.hex}" id="${item.hsl.h}${item.hsl.s}${item.hsl.l}"></button><button type="button" onclick="removeCustomColor('${item.hsl.h}${item.hsl.s}${item.hsl.l}')" class="btn colorRemove noDisplay"><i class="far fa-trash-alt fa-lg"></i></button></div>`;
 	});
 
 	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
@@ -242,9 +243,34 @@ function deleteCustomColors() {
 function addCustomColorBtn(customColor) {
 	const colorButtons = document.getElementById('colorButtons');
 	const insertIndex = colorButtons.innerHTML.indexOf("<!-- Add custom color button -->");
-	let customColorBtn = `<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2"><button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l})" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button></div>`;
+	let customColorBtn = `<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 py-2 colorBtn"><button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l})" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button><button type="button" onclick="removeCustomColor('${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}')" class="btn colorRemove noDisplay">&times;</button></div>`;
 
 	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
+}
+
+function removeCustomColor(customColorHSLId) {
+	console.log("removing: " + customColorHSLId);
+	const old = [...settings.clientSettings.customColors];
+	let index;
+	for (let i = 0; i < old.length; i++) {
+		console.log(`${old[i].hsl.h}${old[i].hsl.s}${old[i].hsl.l}`);
+		if (`${old[i].hsl.h}${old[i].hsl.s}${old[i].hsl.l}` === customColorHSLId) {
+			index = i;
+			console.log("found it at", i);
+			break;
+		}
+	}
+	settings.clientSettings.customColors = [];
+	for (let i = 0; i < old.length; i++) {
+		if (i !== index) {
+			settings.clientSettings.customColors.push(old[i]);
+		}
+	}
+
+	console.log(old);
+	console.log(settings.clientSettings.customColors);
+	deleteCustomColors();
+	showCustomColors();
 }
 
 // Reset all settings to default
@@ -257,6 +283,19 @@ function resetSettings() {
 
 		// Tell the server to reset the settings and get the default settings
 		send("resetSettings", "GET", "text/plain;", "", onReply);
+	}
+}
+
+// Toggle edit mode for custom colors
+function toggleColorEdit() {
+	let buttons = $('.color');
+	for (let i = 0; i < buttons.length; i++) {
+		buttons[i].classList.toggle("colorEdit")
+	}
+
+	let delButtons = $('.colorRemove');
+	for (let i = 0; i < delButtons.length; i++) {
+		delButtons[i].classList.toggle("noDisplay")
 	}
 }
 

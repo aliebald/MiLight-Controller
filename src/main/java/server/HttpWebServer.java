@@ -308,38 +308,6 @@ public class HttpWebServer {
 					bridge.increaseSpeed(zone);
 					break;
 				}
-				case "setColorRed": {
-					bridge.setColorToRed(zone);
-					return "Changed color to red";
-				}
-				case "setColorGreen": {
-					bridge.setColorToGreen(zone);
-					return "Changed color to green";
-				}
-				case "setColorBlue": {
-					bridge.setColorToBlue(zone);
-					return "Changed color to blue";
-				}
-				case "setColorOrange": {
-					bridge.setColorToOrange(zone);
-					return "Changed color to orange";
-				}
-				case "setColorYellow": {
-					bridge.setColorToYellow(zone);
-					return "Changed color to yellow";
-				}
-				case "setColorLavender": {
-					bridge.setColorToLavender(zone);
-					return "Changed color to lavender";
-				}
-				case "setColorAqua": {
-					bridge.setColorToAqua(zone);
-					return "Changed color to aqua";
-				}
-				case "setColorLime": {
-					bridge.setColorToLime(zone);
-					return "Changed color to lime";
-				}
 			}
 
 			return "ERROR: Command not found!";
