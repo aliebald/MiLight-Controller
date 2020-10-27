@@ -292,7 +292,7 @@ function deleteCustomColors() {
 function addCustomColorBtn(customColor) {
 	const colorButtons = document.getElementById('colorButtons');
 	const insertIndex = colorButtons.innerHTML.indexOf("<!-- Add custom color button -->");
-	let customColorBtn = `<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 py-2 colorBtn"><button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l})" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button><button type="button" onclick="removeCustomColor('${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}')" class="btn colorRemove noDisplay">&times;</button></div>`;
+	let customColorBtn = `<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 py-2 colorBtn"><button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l})" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button><button type="button" onclick="removeCustomColor('${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}')" class="btn colorRemove noDisplay"><i class="far fa-trash-alt fa-lg"></i></button></div>`;
 
 	colorButtons.innerHTML = [colorButtons.innerHTML.slice(0, insertIndex), customColorBtn, colorButtons.innerHTML.slice(insertIndex)].join('');
 }
