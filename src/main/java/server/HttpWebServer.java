@@ -20,6 +20,8 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * HttpWebServer to handle the web ui including its communication with the Bridge.
@@ -107,7 +109,17 @@ public class HttpWebServer {
 					// select the correct response
 					System.out.println("request recognised as command");
 					if (!settings.getBridgeIpAddress().equals("")) {
-						response = handleCommand(requestBody);
+						// check if a music mode is selected (music modes do not support zone selection)
+						if(requestBody.startsWith("setMode:M", 8)) {
+							response = handleCommand(requestBody, Zone.ALL);
+						} else {
+							StringBuilder sb = new StringBuilder();
+							// Apply command to all requested zones
+							for (Zone zone : getZones(requestBody)) {
+								sb.append(handleCommand(requestBody, zone));
+							}
+							response = sb.toString();
+						}
 					} else {
 						response = "ERROR: Please create a bridge";
 					}
@@ -161,13 +173,12 @@ public class HttpWebServer {
 		}
 
 		/**
-		 * a request needs to have the following form:
-		 * "command=<command>&zone=<zoneNr>"
+		 * Handles a command for a specific zone
 		 *
-		 * @param request
-		 * @return
+		 * @param request request body received from the web ui
+		 * @return returns a error or success message which can be returned to the web ui
 		 */
-		private String handleCommand(String request) {
+		private String handleCommand(String request, Zone zone) {
 			// Stop musicModeController
 			if (musicModeController != null) {
 				musicModeController.stop();
@@ -177,11 +188,6 @@ public class HttpWebServer {
 			int end = request.indexOf('&');
 			String command = request.substring(8, end);
 			System.out.print("## Command: " + command + ", ");
-
-			// get zone
-			char nr = request.substring(end + 6).charAt(0);
-			Zone zone = getZone(nr);
-			System.out.println("zone: " + zone + " ##");
 
 			// set custom color
 			if(command.startsWith("setColorTo:")) {
@@ -387,17 +393,41 @@ public class HttpWebServer {
 			}
 		}
 
-		private Zone getZone (char nr){
+		/**
+		 * Parses the zones from a request.
+		 * The request body needs to be formatted as follows:
+		 * command=<message>&zones=<z1>,<z2>,<z3>,<z4>
+		 * where z1 ... z4 are either 0 or 1, 1 meaning the zone is requested.
+		 *
+		 * @param requestBody request body received from the web ui
+		 * @return All requested zones or {@code Zone.All} in case all zones where requested.
+		 */
+		private LinkedList<Zone> getZones(String requestBody) {
+			int index = requestBody.indexOf("&zones=") + 7;
+			LinkedList<Zone> zones = new LinkedList<Zone>();
+			for (int i = 0; i < 4; i++) {
+				if (requestBody.charAt(index + (i * 2)) == '1') {
+					zones.add(getZone(i + 1));
+				}
+			}
+
+			if (zones.size() >= 4) {
+				return new LinkedList<>(Collections.singletonList(Zone.ALL));
+			}
+			return zones;
+		}
+
+		private Zone getZone (int nr){
 			switch (nr) {
-				case '0':
+				case 0:
 					return Zone.ALL;
-				case '1':
+				case 1:
 					return Zone.FIRST;
-				case '2':
+				case 2:
 					return Zone.SECOND;
-				case '3':
+				case 3:
 					return Zone.THIRD;
-				case '4':
+				case 4:
 					return Zone.FOURTH;
 				default: {
 					System.err.println("ZONE " + nr + " NOT RECOGNISED (returned ALL)");

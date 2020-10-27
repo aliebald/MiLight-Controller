@@ -229,26 +229,18 @@
 					<div class="row separator"></div>
 
 					<!-- Bridge selector / Zones -->
-					<div class="row pt-2 justify-content-center">
-						<span class="textDark pr-2 pt-2">
-							Zones:
-						</span>
-						<div class="btn-group btn-group-toggle py-1 pr-2" data-toggle="buttons">
-							<label class="btn btn-secondary textDark active">
-								<input type="radio" name="" onclick="setZone(0)" checked> &nbsp;All&nbsp;
-							</label>
-							<label class="btn btn-secondary textDark">
-								<input type="radio" name="" onclick="setZone(1)"> &nbsp;First&nbsp;
-							</label>
-							<label class="btn btn-secondary textDark">
-								<input type="radio" name="" onclick="setZone(2)"> &nbsp;Second&nbsp;
-							</label>
-							<label class="btn btn-secondary textDark">
-								<input type="radio" name="" onclick="setZone(3)"> &nbsp;Third&nbsp;
-							</label>
-							<label class="btn btn-secondary textDark">
-								<input type="radio" name="" onclick="setZone(4)"> &nbsp;Fourth&nbsp;
-							</label>
+					<div class="row">
+						<div class="col-12 py-3 text-center" style="display: inline">
+							<span class="textDark pr-2 pt-2">
+								Zones:
+							</span>
+							<div class="btn-group" role="group" aria-label="Basic example">
+								<button type="button" class="btn btn-secondary textDark active py-3" id="zoneAll">&nbsp;Toggle&nbsp;All&nbsp;</button>
+								<button type="button" class="btn btn-secondary textDark active py-3" id="zone1">&nbsp;First&nbsp;</button>
+								<button type="button" class="btn btn-secondary textDark active py-3" id="zone2">&nbsp;Second&nbsp;</button>
+								<button type="button" class="btn btn-secondary textDark active py-3" id="zone3">&nbsp;Third&nbsp;</button>
+								<button type="button" class="btn btn-secondary textDark active py-3" id="zone4">&nbsp;Fourth&nbsp;</button>
+							</div>
 						</div>
 					</div>
 				</div>

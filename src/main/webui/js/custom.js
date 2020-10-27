@@ -1,4 +1,4 @@
-let zone = 0;
+let zones = [1,1,1,1];
 let brightness = 80;
 
 function toggleNav() {
@@ -14,28 +14,77 @@ function closeNav() {
 	document.getElementById("sidenav").style.width = "0";
 }
 
-function setZone(zoneNr) {
-	switch (zoneNr) {
-		case 1:
-			zone = 1;
-			break;
-		case 2:
-			zone = 2;
-			break;
-		case 3:
-			zone = 3;
-			break;
-		case 4:
-			zone = 4;
-			break;
-		default:
-			zone = 0; 
+const zoneAll	= document.getElementById("zoneAll");
+const zone1 	= document.getElementById("zone1");
+const zone2 	= document.getElementById("zone2");
+const zone3 	= document.getElementById("zone3");
+const zone4 	= document.getElementById("zone4");
+
+zone1.onclick = function () {
+	zoneAll.classList.remove("active");
+	if(zone1.classList.toggle("active")) {
+		zones[0] = 1;
+	} else {
+		zones[0] = 0;
 	}
-	console.log("changed zone to:", zone);
+	console.log(zones.toString());
+}
+
+zone2.onclick = function () {
+	zoneAll.classList.remove("active");
+	if(zone2.classList.toggle("active")) {
+		zones[1] = 1;
+	} else {
+		zones[1] = 0;
+	}
+	console.log(zones.toString());
+}
+
+zone3.onclick = function () {
+	zoneAll.classList.remove("active");
+	if(zone3.classList.toggle("active")) {
+		zones[2] = 1;
+	} else {
+		zones[2] = 0;
+	}
+	console.log(zones.toString());
+}
+
+zone4.onclick = function () {
+	zoneAll.classList.remove("active");
+	if(zone4.classList.toggle("active")){
+		zones[3] = 1;
+	} else {
+		zones[3] = 0;
+	}
+	console.log(zones.toString());
+}
+
+zoneAll.onclick = function () {
+	if (zoneAll.classList.toggle("active")) {
+		zone1.classList.add("active");
+		zone2.classList.add("active");
+		zone3.classList.add("active");
+		zone4.classList.add("active");
+		zones[0] = 1;
+		zones[1] = 1;
+		zones[2] = 1;
+		zones[3] = 1;
+	} else {
+		zone1.classList.remove("active");
+		zone2.classList.remove("active");
+		zone3.classList.remove("active");
+		zone4.classList.remove("active");
+		zones[0] = 0;
+		zones[1] = 0;
+		zones[2] = 0;
+		zones[3] = 0;
+	}
+	console.log(zones.toString());
 }
 
 function sendCommand(message) {
-	send("command", "POST", "text/plain;", `command=${message}&zone=${zone}`, () => {});
+	send("command", "POST", "text/plain;", `command=${message}&zones=${zones.toString()}`, () => {});
 }
 
 function send(url, method, contentType, message, replyFunction) {

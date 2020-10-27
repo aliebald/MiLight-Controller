@@ -79,7 +79,7 @@ input[type=number]:hover {
 	box-shadow: none;
 }
 
-.box, .zone, .topBar, .section {
+.box, .topBar, .section {
 	border: 3px solid #bfbfbf;
 	background: #f2f2f2;	
 }
@@ -99,7 +99,7 @@ input[type=number]:hover {
 }
 
 .zone {
-	height: 90%;
+	transform: scale(2.5);
 }
 
 .topBar {
