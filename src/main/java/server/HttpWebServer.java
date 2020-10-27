@@ -207,6 +207,7 @@ public class HttpWebServer {
 				}
 				System.out.println("Setting brightness to: " + brightness);
 				bridge.setBrightness(zone, brightness);
+				return "Set brightness to " + brightness;
 			}
 
 			// Change Mode
