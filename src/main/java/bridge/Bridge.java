@@ -30,7 +30,7 @@ public class Bridge {
 	 * @param port port of the Bridge
 	 * @param keepAlive keep the session alive? default: True
 	 *                  Starts a new Thread that keeps the session alive by sending a Message every 5 seconds. This message does not affect the lights.
-	 * @param timeOut timeout in milliseconds for receiving answers from the bridge
+	 * @param timeout timeout in milliseconds for receiving answers from the bridge
 	 */
 	public Bridge (String ip, Integer port, Boolean keepAlive, int timeout) throws UnknownHostException, BridgeException {
 		this(InetAddress.getByName(ip), port, keepAlive, timeout);
@@ -40,8 +40,8 @@ public class Bridge {
 	 * @param ip Bridge ip
 	 * @param port port of the Bridge
 	 * @param keepAlive keep the session alive? default: True
-	 *                  Starts a new Thread that keeps the session alive by sending a Message every 5 seconds. This message does not affect the lights.
-	 * @param timeOut timeout in milliseconds for receiving answers from the bridge. A timeout of zero is interpreted as an infinite timeout.
+	 *                  Starts a new Thread that keeps the session alive by sending a message every 5 seconds. This message does not affect the lights.
+	 * @param timeout timeout in milliseconds for receiving answers from the bridge. A timeout of zero is interpreted as an infinite timeout.
 	 */
 	public Bridge (InetAddress ip, Integer port, Boolean keepAlive, int timeout) throws BridgeException {
 		System.out.println("Initializing Bridge at " + ip + ":" + port);
@@ -62,7 +62,7 @@ public class Bridge {
 	}
 
 	/**
-	 * Turns on Lights in the selected zone
+	 * Turns on lights in the selected zone
 	 *
 	 * @param zone zone in which the command should be applied
 	 */
