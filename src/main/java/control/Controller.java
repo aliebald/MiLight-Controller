@@ -1,12 +1,9 @@
-package main.java.control;
+package control;
 
-import main.java.Settings;
-import main.java.audioProcessing.BeatDetector;
-import main.java.bridge.*;
-import main.java.musicModes.CyclicLights;
-import main.java.server.HttpWebServer;
+import settings.Settings;
+import bridge.*;
+import server.HttpWebServer;
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 /**
  * TODO Description

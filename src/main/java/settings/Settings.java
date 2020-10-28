@@ -1,6 +1,6 @@
-package main.java;
+package settings;
 
-import main.java.audioProcessing.BeatDetector;
+import audioProcessing.BeatDetector;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

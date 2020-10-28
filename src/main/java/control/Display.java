@@ -1,7 +1,7 @@
-package main.java.control;
+package control;
 
-import main.java.audioProcessing.BeatDetector;
-import main.java.bridge.Bridge;
+import audioProcessing.BeatDetector;
+import bridge.Bridge;
 import javafx.application.Application;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -9,7 +9,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
 import javafx.scene.*;
-import main.java.musicModes.CyclicLights;
+import musicModes.*;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.text.SimpleDateFormat;

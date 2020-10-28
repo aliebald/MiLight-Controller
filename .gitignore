@@ -3,10 +3,10 @@
 
 # intellij
 .idea/
-out/
+target/
 *.iml
 
-src/test/
+src/main/java/test/
 
 # Package Files #
 *.jar

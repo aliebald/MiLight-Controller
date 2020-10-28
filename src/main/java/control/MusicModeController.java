@@ -1,7 +1,7 @@
-package main.java.control;
+package control;
 
-import main.java.audioProcessing.BeatDetector;
-import main.java.musicModes.MusicMode;
+import audioProcessing.BeatDetector;
+import musicModes.MusicMode;
 
 /**
  * This class is responsible for controlling music effects.

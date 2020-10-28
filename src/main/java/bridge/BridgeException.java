@@ -1,4 +1,4 @@
-package main.java.bridge;
+package bridge;
 
 public class BridgeException extends Exception {
 	public BridgeException (String errorMessage) {

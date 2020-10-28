@@ -1,4 +1,4 @@
-package main.java.bridge;
+package bridge;
 
 import java.io.IOException;
 import java.net.*;

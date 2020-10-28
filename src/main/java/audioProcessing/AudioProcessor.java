@@ -1,4 +1,4 @@
-package main.java.audioProcessing;
+package audioProcessing;
 
 /**
  * AudioProcessor provides some misc static methods for working with Audio.

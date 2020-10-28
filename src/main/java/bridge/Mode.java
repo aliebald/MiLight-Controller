@@ -1,4 +1,4 @@
-package main.java.bridge;
+package bridge;
 
 /**
  * Build in modes, tested for RGB and RGBW Controllers.

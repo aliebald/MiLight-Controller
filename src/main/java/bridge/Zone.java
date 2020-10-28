@@ -1,4 +1,4 @@
-package main.java.bridge;
+package bridge;
 
 import java.util.ArrayList;
 import java.util.Arrays;

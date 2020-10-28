@@ -1,7 +1,7 @@
-package main.java.musicModes;
+package musicModes;
 
-import main.java.bridge.Bridge;
-import main.java.bridge.Zone;
+import bridge.Bridge;
+import bridge.Zone;
 
 /**
  * FlashingLights MusicMode

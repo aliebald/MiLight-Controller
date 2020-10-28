@@ -1,16 +1,16 @@
-package main.java.server;
+package server;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import main.java.Settings;
-import main.java.audioProcessing.BeatDetector;
-import main.java.bridge.Bridge;
-import main.java.bridge.BridgeException;
-import main.java.bridge.Mode;
-import main.java.bridge.Zone;
-import main.java.control.MusicModeController;
-import main.java.musicModes.*;
+import settings.Settings;
+import audioProcessing.BeatDetector;
+import bridge.Bridge;
+import bridge.BridgeException;
+import bridge.Mode;
+import bridge.Zone;
+import control.MusicModeController;
+import musicModes.*;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.awt.*;

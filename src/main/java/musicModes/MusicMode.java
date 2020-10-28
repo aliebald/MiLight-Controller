@@ -1,4 +1,4 @@
-package main.java.musicModes;
+package musicModes;
 
 /**
  * @author Alexander Liebald

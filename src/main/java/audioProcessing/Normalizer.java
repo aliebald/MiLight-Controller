@@ -1,4 +1,4 @@
-package main.java.audioProcessing;
+package audioProcessing;
 
 import java.util.Collections;
 import java.util.LinkedList;
