@@ -253,62 +253,21 @@ public class BeatDetector {
 	}
 
 	/**
-	 * Work in progress!
 	 * Returns the standard TargetDataLine.
-	 * TODO: automatically find the true standard TargetDataLine and make it possible to choose TargetDataLine in web interface (setup and settings wip).
-	 * TODO: rework
 	 *
 	 * @return standard TargetDataLine to listen to.
 	 */
-	private static TargetDataLine getStdTargetDataLine () {
-		DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
-
-		// Print available mixers
-		System.out.println("Mixers available:");
-		Mixer.Info[] mixers = AudioSystem.getMixerInfo();
-		for (int i = 0; i < mixers.length; i++) {
-			System.out.println(i + ": " + mixers[i]);
-			Mixer mixer = AudioSystem.getMixer(mixers[i]);
-			Line.Info[] sourceInfos = mixer.getSourceLineInfo();
-			System.out.println("  Source Lines:");
-			for (int j = 0; j < sourceInfos.length; j++) {
-				System.out.println("    " + j + ": " + sourceInfos[j]);
-			}
-			Line.Info[] targetLines = mixer.getTargetLineInfo();
-			System.out.println("  Target Lines:");
-			for (int j = 0; j < targetLines.length; j++) {
-				System.out.println("    " + j + ": " + targetLines[j]);
-			}
-			System.out.println("  canCreateTargetDataLine: " + canCreateTargetDataLine(mixer, info));
-			System.out.println();
-		}
-
-		// TODO Select correct input
-		Mixer mixer = AudioSystem.getMixer(mixers[5]);
-
-		System.out.println("\n#######\nTry to get the Line");
-		Line.Info targetLineInfo = mixer.getTargetLineInfo()[0];
-		System.out.println("info: " + info.toString());
-		TargetDataLine targetDataLine = null;
-		try {
-			targetDataLine = (TargetDataLine) mixer.getLine(targetLineInfo);
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("TargetDataLine: " + targetDataLine.getLineInfo() + "\n#######\n");
-		return targetDataLine;
-
+	private static TargetDataLine getStdTargetDataLine() {
+		return getTargetDataLine(getPossibleTargetDataLines().getFirst());
 	}
 
 	/**
-	 * TODO description
+	 * Get the TargetDataLine with the given name.
 	 *
-	 * @param name
-	 * @return
+	 * @param name name of a TargetDataLine
+	 * @return TargetDataLine with the given {@code name}
 	 */
-	private TargetDataLine getTargetDataLine(String name) {
-		DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
+	private static TargetDataLine getTargetDataLine(String name) {
 		Mixer.Info[] mixers = AudioSystem.getMixerInfo();
 
 		Mixer mixer = null;
@@ -339,9 +298,9 @@ public class BeatDetector {
 	}
 
 	/**
-	 * TODO description
+	 * Gets a List with all compatible TargetDataLines
 	 *
-	 * @return
+	 * @return all TargetDataLines that can be used
 	 */
 	public static LinkedList<String> getPossibleTargetDataLines() {
 		LinkedList<String> lines = new LinkedList<String>();
