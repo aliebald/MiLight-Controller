@@ -2,7 +2,9 @@ package bridge;
 
 import java.io.IOException;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Bridge can be used as an API for MiLight WiFi Bridge version 6.
@@ -327,6 +329,65 @@ public class Bridge {
 		} else {
 			return (byte) percentage;
 		}
+	}
+
+	/**
+	 * Discovers all v6 and v5 bridges in the network.
+	 * Please note that no part of this software was tested with v5 bridges. See README.md.
+	 *
+	 * @return null if an error occurred, otherwise a set containing the ip addresses of all v6 and v5 bridges in the local network.
+	 * @throws SocketException Throws an SocketException if unable to open new DatagramSocket
+	 */
+	public static HashSet<String> discoverBridges() throws SocketException {
+		byte[] b1 = "HF-A11ASSISTHREAD".getBytes(StandardCharsets.UTF_8);	// Discover v6 Bridges.
+		byte[] b2 = "Link_Wi-Fi".getBytes(StandardCharsets.UTF_8);			// Discover v5 Bridges.
+		byte[] receivedData = new byte[32];
+
+		HashSet<String> bridges = new HashSet<String>();
+		DatagramSocket socket = new DatagramSocket();;
+		InetAddress broadcast = null;
+		String ip;
+
+		socket.setSoTimeout(1000);
+
+		try {
+			broadcast = InetAddress.getByName("255.255.255.255");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		DatagramPacket sendPacketV6	 = new DatagramPacket(b1, b1.length, broadcast, 48899);
+		DatagramPacket sendPacketV5	 = new DatagramPacket(b2, b2.length, broadcast, 48899);
+		DatagramPacket receivePacket = new DatagramPacket(receivedData, receivedData.length);
+
+		// Send the discover packages
+		for (int i = 0; i < 10; i++) {
+			try {
+				socket.send(sendPacketV6);
+				socket.send(sendPacketV5);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException ignored) {
+			}
+		}
+
+		// receive bridges until the timout is over
+		while(true) {
+			try {
+				socket.receive(receivePacket);
+			} catch (IOException ignored) {
+				break;
+			}
+			ip = new String(receivedData, StandardCharsets.UTF_8);
+			ip = ip.substring(0, ip.indexOf(','));
+			bridges.add(ip);
+		}
+
+		return bridges;
 	}
 
 	/**
