@@ -1,6 +1,7 @@
 package settings;
 
 import audioProcessing.BeatDetector;
+import bridge.Bridge;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,8 +9,10 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
 
 /**
  * Handles application settings
@@ -25,10 +28,12 @@ public class Settings {
 	 * Will try to load custom settings. If none are found it will load the default settings
 	 *
 	 * @throws IOException Throws an if an error occurs when reading the settings
+	 * @throws SocketException Throws an SocketException if resetting possibleBridgeIpAddresses fails to open a new socket in {@link Bridge#discoverBridges()}.
 	 */
 	public Settings() throws IOException {
 		try {
 			settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "settings.json"))));
+			resetPossibleBridgeIpAddresses();
 			updatePossibleTargetDataLines();
 		} catch (IOException e) {
 			// Load default settings
@@ -159,6 +164,29 @@ public class Settings {
 	}
 
 	/**
+	 * possibleBridgeIpAddresses lists all discovered bridges
+	 *
+	 * @return all possible bridge ip addresses for bridges in the local network (if set)
+	 */
+	public String[] getPossibleBridgeIpAddresses() {
+		JSONArray arr = settings.getJSONArray("possibleBridgeIpAddresses");
+		String[] ret = new String[arr.length()];
+		for (int i = 0; i < ret.length; i++) {
+			ret[i] = (String) arr.get(i);
+		}
+		return ret;
+	}
+
+	/**
+	 * possibleBridgeIpAddresses lists all discovered bridges
+	 *
+	 * @param possibleBridgeIpAddresses  all possible bridge ip addresses for bridges in the local network
+	 */
+	private void setPossibleBridgeIpAddresses(String[] possibleBridgeIpAddresses) {
+		settings.put("possibleBridgeIpAddresses", new JSONArray(possibleBridgeIpAddresses));
+	}
+
+	/**
 	 * Tests and Updates settings.
 	 *
 	 * @param settingsJSON whole JSON settings file as a String.
@@ -205,10 +233,12 @@ public class Settings {
 	 * Resets current setting to default settings
 	 *
 	 * @throws IOException throws an IOException if reading or writing the file fails
+	 * @throws SocketException Throws an SocketException if resetting possibleBridgeIpAddresses fails to open a new socket in {@link Bridge#discoverBridges()}.
 	 */
 	public void setToDefaultSettings() throws IOException {
 		settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "defaultSettings.json"))));
 		updatePossibleTargetDataLines();
+		resetPossibleBridgeIpAddresses();
 		saveSettings();
 	}
 
@@ -223,6 +253,18 @@ public class Settings {
 			// TODO Handle IOException
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Discovers bridges in the local network and replaces possibleBridgeIpAddresses.
+	 *
+	 * This should not be called regularly since discovering takes a bit of time, see {@link Bridge#discoverBridges()}
+	 *
+	 * @throws SocketException Throws a SocketException if {@link Bridge#discoverBridges()} is unable to open up a new socket.
+	 */
+	public void resetPossibleBridgeIpAddresses() throws SocketException {
+		HashSet<String> bridges = Bridge.discoverBridges();
+		setPossibleBridgeIpAddresses(bridges.toArray(new String[bridges.size()]));
 	}
 
 	/**

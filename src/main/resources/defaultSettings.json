@@ -4,6 +4,7 @@
 	"openBrowserOnStart": true,
 	"possibleTargetDataLines": [],
 	"activeTargetDataLine": "none",
+	"possibleBridgeIpAddresses": [],
 	"bridgeIpAddress": "192.168.0.52",
 	"bridgePort": 5987,
 	"beatCooldown": 100,
