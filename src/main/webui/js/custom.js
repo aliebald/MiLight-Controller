@@ -191,27 +191,45 @@ function setColorTo(h, s, l) {
 let settings;
 send("settings.json", "GET", "application/json;", "settings.json", settingsReady);
 
-function settingsReady (set){
+// Applies settings to ui
+function settingsReady (set) {
 	settings = JSON.parse(set);
 
 	document.getElementById('openBrowserOnStart').checked	= settings.openBrowserOnStart;
-	document.getElementById('activeTargetDataLine').value	= settings.activeTargetDataLine;
-	document.getElementById('bridgeIpAddress').value		= settings.bridgeIpAddress;
 	document.getElementById('bridgePort').valueAsNumber	= settings.bridgePort;
 
-	beatCooldownSlider.value	= settings.beatCooldown;
-	beatCooldownNum.value		= settings.beatCooldown;
+	beatCooldownSlider.value		= settings.beatCooldown;
+	beatCooldownNum.value			= settings.beatCooldown;
 
-	const dropdown = document.getElementById('activeTargetDataLine');
-	dropdown.innerHTML = "<option value=\"none\">none</option>\n";
+	const bridgeSelector 			= document.getElementById('bridgeIpAddress');
+	const targetDataLineSelector	= document.getElementById('activeTargetDataLine');
 
-	settings.possibleTargetDataLines.forEach(function (item, index) {
-		if(item === settings.activeTargetDataLine) {
-			dropdown.innerHTML += `<option value=\"${item}\" selected>${item}</option>\n`;
+	// Update targetDataLine selector
+	targetDataLineSelector.innerHTML = "<option value=\"none\">none</option>\n";
+	settings.possibleTargetDataLines.forEach(function (item) {
+		if (item === settings.activeTargetDataLine) {
+			targetDataLineSelector.innerHTML += `<option value=\"${item}\" selected>${item}</option>\n`;
 		} else {
-			dropdown.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
+			targetDataLineSelector.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
 		}
 	});
+
+	// Update bridge ip address selector
+	if (settings.possibleBridgeIpAddresses.length > 0) {
+		bridgeSelector.innerHTML = "";
+	} else {
+		bridgeSelector.innerHTML = "<option value=\"none\">No bridge found in your local network</option>\n";
+	}
+	settings.possibleBridgeIpAddresses.forEach(function (item) {
+		if (item === settings.bridgeIpAddress) {
+			bridgeSelector.innerHTML += `<option value=\"${item}\" selected>${item}</option>\n`;
+		} else {
+			bridgeSelector.innerHTML += `<option value=\"${item}\">${item}</option>\n`;
+		}
+	});
+
+	bridgeSelector.value			= settings.bridgeIpAddress;
+	targetDataLineSelector.value	= settings.activeTargetDataLine;
 
 	showCustomColors();
 }
@@ -222,6 +240,13 @@ function applySettings() {
 	settings.openBrowserOnStart		= document.getElementById('openBrowserOnStart').checked;
 	settings.bridgeIpAddress		= document.getElementById('bridgeIpAddress').value;
 	settings.bridgePort				= document.getElementById('bridgePort').valueAsNumber;
+
+	// check if no bridge is selected
+	if (settings.bridgeIpAddress === "none") {
+		// TODO Toast
+		console.log("Aborting save because no bridge is selected")
+		return;
+	}
 
 	// send settings json
 	console.log(settings);
