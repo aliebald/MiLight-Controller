@@ -218,7 +218,7 @@ function settingsReady (set) {
 	if (settings.possibleBridgeIpAddresses.length > 0) {
 		bridgeSelector.innerHTML = "";
 	} else {
-		bridgeSelector.innerHTML = "<option value=\"none\">No bridge found in your local network</option>\n";
+		bridgeSelector.innerHTML = "<option value=\"\">No bridge found in your local network</option>\n";
 	}
 	settings.possibleBridgeIpAddresses.forEach(function (item) {
 		if (item === settings.bridgeIpAddress) {
@@ -242,9 +242,9 @@ function applySettings() {
 	settings.bridgePort				= document.getElementById('bridgePort').valueAsNumber;
 
 	// check if no bridge is selected
-	if (settings.bridgeIpAddress === "none") {
-		// TODO Toast
-		console.log("Aborting save because no bridge is selected")
+	if (settings.bridgeIpAddress === "") {
+		document.getElementById('saveSettingsErrorMessage').innerHTML = "Please select a bridge before applying changes.";
+		$('#saveSettingsError').toast('show');
 		return;
 	}
 
@@ -265,6 +265,7 @@ function applySettings() {
 		} else {
 			$('#settingsModal').modal('hide');
 			$('#saveSettingsSuccess').toast('show');
+			$('#saveSettingsError').toast('hide');
 		}
 	};
 
