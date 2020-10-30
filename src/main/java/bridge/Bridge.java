@@ -646,54 +646,64 @@ public class Bridge {
 	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
 	private byte[] sendData (byte[] data) throws IOException {
-		byte[] receiveData = new byte[32];
+		DatagramPacket sendPacket		= new DatagramPacket(data, data.length, bridgeIp, port);
+		DatagramPacket receivePacket	= new DatagramPacket(new byte[32],32);
 
-		DatagramPacket sendPacket = new DatagramPacket(data, data.length, bridgeIp, port);
-		DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+		int attempts = 2;
+		// Attempt to send data as long as the last response was not a session dead message and attempts > 0, while decreasing attempts each try.
+		do {
+			System.out.println("\nattempting to send: " + bytesToHexString(sendPacket.getData()));
 
-		System.out.println("\nattempting to send: " + bytesToHexString(sendPacket.getData()));
+			try {
+				socket.send(sendPacket);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+				System.exit(1);
+			} catch (IllegalBlockingModeException e) {
+				e.printStackTrace();
+			}
 
-		// TODO: resend message if session is lost
-		try {
-			socket.send(sendPacket);
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			System.exit(1);
-		} catch (IllegalBlockingModeException e) {
-			e.printStackTrace();
-		}
+			try {
+				socket.receive(receivePacket);
+			} catch (SocketTimeoutException ignored) {
+				// Catch the SocketTimeoutException but pass the IOException to the caller
+				System.out.println("SocketTimeoutException: receiving a message failed. Timeout: " + socket.getSoTimeout());
+				return null;
+			} catch (IllegalBlockingModeException e) {
+				e.printStackTrace();
+			}
 
-		try {
-			socket.receive(receivePacket);
-		} catch (SocketTimeoutException ignored) {
-			// Catch the SocketTimeoutException but pass the IOException to the caller
-			System.out.println("SocketTimeoutException: receiving a message failed");
-			return null;
-		} catch (IllegalBlockingModeException e) {
-			e.printStackTrace();
-		}
+			System.out.println("received data: " + bytesToHexString(receivePacket.getData()) + "\nwifiBridgeSessionID1: " + bytesToHexString(wifiBridgeSessionID1) + ", wifiBridgeSessionID2: " + bytesToHexString(wifiBridgeSessionID2) + "\n");
 
-		String modifiedSentence = bytesToHexString(receivePacket.getData());
-		System.out.println("received data: " + modifiedSentence + "\n");
-		System.out.println("wifiBridgeSessionID1: " + bytesToHexString(wifiBridgeSessionID1) + ", wifiBridgeSessionID2: " + bytesToHexString(wifiBridgeSessionID2));
+			// Check if the Session is still alive and restart the session if automaticallyRestartSession is enabled.
+			if (automaticallyRestartSession && !sessionAlive(receivePacket.getData())) {
+				System.out.println("###\n\tBRIDGE NOT CONNECTED\n###");
 
-		// Check if the Session is still alive
-		if(!sessionAlive(receiveData)) {
-			System.out.println("###\n\tBRIDGE NOT CONNECTED\n###");
-
-			// Restart the session if automaticallyRestartSession is enabled.
-			if (automaticallyRestartSession) {
 				try {
 					startNewSession(2);
+					// update wifiBridgeSessionID1 & wifiBridgeSessionID2 in data
+					updateSessionIDs(sendPacket.getData());
 				} catch (BridgeException e) {
 					// TODO: do not exit, better error handing required
 					e.printStackTrace();
 					System.exit(1); // only for testing!
 				}
 			}
-		}
 
-		return receiveData;
+			attempts--;
+		} while (automaticallyRestartSession && attempts > 0 && !sessionAlive(receivePacket.getData()));
+
+		return receivePacket.getData();
+	}
+
+	/**
+	 * Updates wifiBridgeSessionID1 and wifiBridgeSessionID2 in a byte array with a command designated to the bridge.
+	 *
+	 * @param 	data byte array with a command designated to the bridge
+	 */
+	private void updateSessionIDs(byte[] data) {
+		data[5] = wifiBridgeSessionID1;
+		data[6] = wifiBridgeSessionID2;
 	}
 
 	/**
@@ -971,11 +981,11 @@ public class Bridge {
 		}
 
 		// increase response timeout
-		int oldTimeout = 0;
-		try {
-			oldTimeout = socket.getSoTimeout();
-			socket.setSoTimeout(oldTimeout * 4);
-		} catch (SocketException ignored) {
+		if (timeout > 0) {
+			try {
+				socket.setSoTimeout(timeout * 4);
+			} catch (SocketException ignored) {
+			}
 		}
 
 		System.out.println("\n## Starting a new session ##");
@@ -1017,9 +1027,9 @@ public class Bridge {
 		System.out.println("bridge connected");
 
 		// reset the timeout
-		if(oldTimeout > 0) {
+		if(timeout > 0) {
 			try {
-				socket.setSoTimeout(oldTimeout);
+				socket.setSoTimeout(timeout);
 			} catch (SocketException ignored) {
 			}
 		}
