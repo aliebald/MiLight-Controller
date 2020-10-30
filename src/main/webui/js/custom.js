@@ -205,7 +205,12 @@ function settingsReady (set) {
 	const targetDataLineSelector	= document.getElementById('activeTargetDataLine');
 
 	// Update targetDataLine selector
-	targetDataLineSelector.innerHTML = "<option value=\"none\">none</option>\n";
+	if (settings.activeTargetDataLine === "none") {
+		targetDataLineSelector.innerHTML = "<option value=\"none\" selected>none</option>\n";
+	} else {
+		targetDataLineSelector.innerHTML = "<option value=\"none\">none</option>\n";
+	}
+
 	settings.possibleTargetDataLines.forEach(function (item) {
 		if (item === settings.activeTargetDataLine) {
 			targetDataLineSelector.innerHTML += `<option value=\"${item}\" selected>${item}</option>\n`;
@@ -220,6 +225,7 @@ function settingsReady (set) {
 	} else {
 		bridgeSelector.innerHTML = "<option value=\"\">No bridge found in your local network</option>\n";
 	}
+
 	settings.possibleBridgeIpAddresses.forEach(function (item) {
 		if (item === settings.bridgeIpAddress) {
 			bridgeSelector.innerHTML += `<option value=\"${item}\" selected>${item}</option>\n`;
