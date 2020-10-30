@@ -351,6 +351,7 @@ function removeCustomColor(customColorHSLId) {
 	console.log(old);
 	console.log(settings.clientSettings.customColors);
 	deleteCustomColors();
+	applySettings();
 	showCustomColors();
 }
 
