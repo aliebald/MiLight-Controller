@@ -30,7 +30,7 @@ import java.util.LinkedList;
  */
 public class HttpWebServer {
 	private int port;
-	private final String path = "D:\\Intellij Workspace\\MiLight Controller\\src\\main\\webui";
+	private final String path = ".\\src\\main\\webui";
 	private String site, customCSS, customJs;
 	private Bridge bridge;
 	private MusicModeController musicModeController;

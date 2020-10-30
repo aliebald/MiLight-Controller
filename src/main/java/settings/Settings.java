@@ -22,7 +22,7 @@ import java.util.HashSet;
  */
 public class Settings {
 	private JSONObject settings;
-	private String path = "D:\\Intellij Workspace\\MiLight Controller\\src\\main\\resources\\";
+	private String path = ".\\src\\main\\resources\\";
 
 	/**
 	 * Construct a new Settings object which handles server and client settings.
