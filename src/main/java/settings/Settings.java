@@ -91,7 +91,6 @@ public class Settings {
 			settings.put("activeTargetDataLine", targetDataLine);
 		} else if(targetDataLine.equals("none")) {
 			settings.put("activeTargetDataLine", targetDataLine);
-			setHasMusicModeController(false);
 		} else {
 			return false;
 		}
@@ -125,42 +124,6 @@ public class Settings {
 	 */
 	public void setBridgePort(int port){
 		settings.put("bridgePort", port);
-	}
-
-	/**
-	 * HasBridge is true if a valid & working bridge is connected
-	 *
-	 * @return returns the value of the hasBridge setting
-	 */
-	public boolean getHasBridge() {
-		return settings.getBoolean("hasBridge");
-	}
-
-	/**
-	 * HasBridge should only be set to true if a valid & working bridge is connected!
-	 *
-	 * @param hasBridge the value of the hasBridge setting
-	 */
-	public void setHasBridge(boolean hasBridge) {
-		settings.put("hasBridge", hasBridge);
-	}
-
-	/**
-	 * hasMusicModeController is true if a MusicModeController is available
-	 *
-	 * @return returns the value of the hasMusicModeController setting
-	 */
-	public boolean getHasMusicModeController() {
-		return settings.getBoolean("hasMusicModeController");
-	}
-
-	/**
-	 * hasMusicModeController should only be set to true if a MusicModeController is available
-	 *
-	 * @param hasMusicModeController value of the hasMusicModeController setting
-	 */
-	public void setHasMusicModeController(boolean hasMusicModeController) {
-		settings.put("hasMusicModeController", hasMusicModeController);
 	}
 
 	/**
@@ -199,17 +162,6 @@ public class Settings {
 		setOpenBrowserOnStart(in.getBoolean("openBrowserOnStart"));
 		setBridgePort((Integer) in.getNumber("bridgePort"));
 		setBeatCooldown(in.getInt("beatCooldown"));
-
-		// insert TargetDataLine name and update hasMusicModeController if possible
-		if (setActiveTargetDataLine((String) in.get("activeTargetDataLine")) && !in.get("activeTargetDataLine").equals("none")) {
-			setHasMusicModeController(true);
-		}
-
-		// Check if hasBridge can be set
-		if (!getBridgeIpAddress().equals("") && InetAddress.getByName(getBridgeIpAddress()).isReachable(750)) {
-			setHasBridge(true);
-			// Checks if there is actually a bridge need to happen on initiation (in HttpServer)
-		}
 
 		// Update client settings
 		settings.put("clientSettings", in.get("clientSettings"));

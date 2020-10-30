@@ -344,7 +344,7 @@ public class HttpWebServer {
 			}
 
 			// setup bridge / replace bridge if ip or port changed
-			if (settings.getHasBridge() && (bridge == null || !oldIp.equals(settings.getBridgeIpAddress()) || oldPort != settings.getBridgePort())) {
+			if (!settings.getBridgeIpAddress().equals("") && (bridge == null || !oldIp.equals(settings.getBridgeIpAddress()) || oldPort != settings.getBridgePort())) {
 				// stop musicModeController, since it might use the old bridge
 				if (musicModeController != null) {
 					musicModeController.stop();
@@ -355,7 +355,6 @@ public class HttpWebServer {
 					bridge = new Bridge(settings.getBridgeIpAddress(), settings.getBridgePort(), false, 200); // TODO add timeout to settings
 					System.out.println("created new Bridge");
 				} catch (Exception ignored) {
-					settings.setHasBridge(false);
 					errorLog = "ERROR: Failed to created new Bridge.";
 				}
 			}
@@ -368,7 +367,6 @@ public class HttpWebServer {
 					settings.resetActiveTargetDataLine();
 					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
 				}
-				settings.setHasMusicModeController(true);
 
 			} else if (musicModeController != null && !oldActiveTargetDataLine.equals(settings.getActiveTargetDataLine())){
 				// Replace BeatDetector if activeTargetDataLine changed
