@@ -282,15 +282,13 @@ function applySettings() {
 function addCustomColor() {
 	// check if the exact color already exists
 	if(document.getElementById(`${colorPicker.color.hsl.h}${colorPicker.color.hsl.s}${colorPicker.color.hsl.l}`)) {
-		console.log("Custom color not added, because it already exists");
-		// TODO Toast
+		$('#customColorError').toast('show');
 	} else {
 		const customColor = {
 			"hsl": colorPicker.color.hsl,
 			"hex": colorPicker.color.hexString
 		};
-
-		console.log("adding", customColor);
+		$('#customColorError').toast('hide');
 		settings.clientSettings.customColors.push(customColor);
 		applySettings();
 		addCustomColorBtn(customColor);
