@@ -19,7 +19,7 @@ public enum Zone {
 	FOURTH(4);
 
 	private final byte byteNr;
-	private static final Queue<Zone> zones = new LinkedList<Zone>(new ArrayList<Zone>(Arrays.asList(Zone.FIRST, Zone.SECOND, Zone.THIRD, Zone.FOURTH)));
+	private static final Queue<Zone> zones = new LinkedList<>(Arrays.asList(Zone.FIRST, Zone.SECOND, Zone.THIRD, Zone.FOURTH));
 
 	public byte gebByte (){
 		return byteNr;

@@ -2,7 +2,6 @@ package musicModes;
 
 import bridge.Bridge;
 import bridge.Zone;
-import java.util.Random;
 
 /**
  * SirenLights MusicMode
@@ -11,10 +10,7 @@ import java.util.Random;
  */
 public class SirenLights implements MusicMode {
 	private Bridge bridge;
-	private final Random random = new Random();
-	private Zone lastZone = Zone.ALL;
 	private byte run = 0;
-	private boolean lastBlue = false;
 
 	public SirenLights(Bridge bridge) {
 		this.bridge = bridge;
@@ -24,7 +20,6 @@ public class SirenLights implements MusicMode {
 
 	@Override
 	public void beat() {
-		Zone zone = Zone.getNextZone();
 		System.out.println("SirenLights.beat run = " + run);
 		switch (run) {
 			case 0: {
@@ -93,7 +88,6 @@ public class SirenLights implements MusicMode {
 
 		// bridge.turnOn(lastZone);
 		// bridge.turnOff(zone);
-		lastZone = zone;
 	}
 
 	@Override

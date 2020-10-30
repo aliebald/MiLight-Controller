@@ -343,9 +343,9 @@ public class Bridge {
 		byte[] b2 = "Link_Wi-Fi".getBytes(StandardCharsets.UTF_8);			// Discover v5 Bridges.
 		byte[] receivedData = new byte[32];
 
-		HashSet<String> bridges = new HashSet<String>();
-		DatagramSocket socket = new DatagramSocket();;
-		InetAddress broadcast = null;
+		HashSet<String> bridges = new HashSet<>();
+		DatagramSocket socket = new DatagramSocket();
+		InetAddress broadcast;
 		String ip;
 
 		socket.setSoTimeout(1000);

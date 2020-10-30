@@ -3,11 +3,6 @@ package musicModes;
 import bridge.Bridge;
 import bridge.Zone;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-
 /**
  * CyclicLightsMultipleColors MusicMode
  *

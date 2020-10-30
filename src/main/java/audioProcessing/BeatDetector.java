@@ -16,7 +16,7 @@ public class BeatDetector {
 	private static AudioFormat audioFormat = new AudioFormat(sampleRate, sampleSizeInBits, channels, true, true);
 
 	private final LinkedList <Long> historyBuffer = new LinkedList<>();
-	private final Normalizer normalizer = new Normalizer();;
+	private final Normalizer normalizer = new Normalizer();
 	private TargetDataLine line;
 
 	// The cooldown regulates how often a beat can be detected. A beat can occur at most every cooldown milliseconds
@@ -73,9 +73,12 @@ public class BeatDetector {
 	}
 
 	/**
-	 * TODO description
+	 * Constructs a new BeatDetector using the standard TargetDataLine.
 	 *
-	 * @param cooldown
+	 * @param cooldown minimum time in milliseconds between beats.
+	 *                 A high value can lead to skipped beats while a low value may lead to the same beat being detected twice.
+	 *                 Setting this to a higher value reduces load on the network, Bridge and controllers. A good starting point
+	 *                 could be between 80-200, but values outside of this range can make sense too.
 	 */
 	public BeatDetector(int cooldown) throws LineUnavailableException {
 		this(cooldown, null);
@@ -303,7 +306,7 @@ public class BeatDetector {
 	 * @return all TargetDataLines that can be used
 	 */
 	public static LinkedList<String> getPossibleTargetDataLines() {
-		LinkedList<String> lines = new LinkedList<String>();
+		LinkedList<String> lines = new LinkedList<>();
 		DataLine.Info info = new DataLine.Info(TargetDataLine.class, audioFormat);
 		Mixer.Info[] mixers = AudioSystem.getMixerInfo();
 

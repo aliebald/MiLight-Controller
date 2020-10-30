@@ -49,7 +49,7 @@ public class HttpWebServer {
 	/**
 	 * Start the website server
 	 */
-	public void start() throws IOException, BridgeException {
+	public void start() throws IOException {
 		setupBridgeAndMusicModeController();
 		InetAddress address = InetAddress.getLocalHost();
 
@@ -404,7 +404,7 @@ public class HttpWebServer {
 		 */
 		private LinkedList<Zone> getZones(String requestBody) {
 			int index = requestBody.indexOf("&zones=") + 7;
-			LinkedList<Zone> zones = new LinkedList<Zone>();
+			LinkedList<Zone> zones = new LinkedList<>();
 			for (int i = 0; i < 4; i++) {
 				if (requestBody.charAt(index + (i * 2)) == '1') {
 					zones.add(getZone(i + 1));
