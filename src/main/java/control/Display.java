@@ -12,6 +12,7 @@ import javafx.scene.*;
 import musicModes.*;
 
 import javax.sound.sampled.LineUnavailableException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -111,7 +112,11 @@ public class Display extends Application {
 			e.printStackTrace();
 			return;
 		}
-		mmc = new MusicModeController(new CyclicLights(bridge), new BeatDetector(120));
+		try {
+			mmc = new MusicModeController(new CyclicLights(bridge), new BeatDetector(120));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		mmcThread = new Thread(mmc);
 		mmcThread.start();
 

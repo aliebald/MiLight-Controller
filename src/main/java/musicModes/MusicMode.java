@@ -1,5 +1,7 @@
 package musicModes;
 
+import java.io.IOException;
+
 /**
  * @author Alexander Liebald
  */
@@ -9,7 +11,7 @@ public interface MusicMode {
 	 * Depending on the implementation of this method, a
 	 * light effect will be executed
 	 */
-	void beat();
+	void beat() throws IOException;
 
 	/**
 	 * This method gets called when no beat is detected.
@@ -17,5 +19,5 @@ public interface MusicMode {
 	 * light effect will be executed. Some implementations also
 	 * do nothing when this method is called.
 	 */
-	void maintain();
+	void maintain() throws IOException;
 }

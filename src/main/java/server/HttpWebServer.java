@@ -79,6 +79,9 @@ public class HttpWebServer {
 			} catch (BridgeException e) {
 				e.printStackTrace();
 				// TODO Exception Handling
+			} catch (IOException e) {
+				// TODO Exception Handling
+				e.printStackTrace();
 			}
 
 			if (!settings.getActiveTargetDataLine().equals("none")) {
@@ -178,7 +181,7 @@ public class HttpWebServer {
 		 * @param request request body received from the web ui
 		 * @return returns a error or success message which can be returned to the web ui
 		 */
-		private String handleCommand(String request, Zone zone) {
+		private String handleCommand(String request, Zone zone) throws IOException {
 			// Stop musicModeController
 			if (musicModeController != null) {
 				musicModeController.stop();

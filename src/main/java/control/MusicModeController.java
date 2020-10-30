@@ -3,6 +3,8 @@ package control;
 import audioProcessing.BeatDetector;
 import musicModes.MusicMode;
 
+import java.io.IOException;
+
 /**
  * This class is responsible for controlling music effects.
  * It is recommended to start this in a separate Thread, can be stopped by calling {@code stop()} on {@code MusicModeController} (Not on the actual Thread!).
@@ -20,13 +22,17 @@ public class MusicModeController implements Runnable {
 		running = false;
 	}
 
-	public void run(){
+	public void run() {
 		running = true;
 		while (keepRunning()) {
-			if (beatDetector.detect()) {
-				musicMode.beat();
-			} else {
-				musicMode.maintain();
+			try {
+				if (beatDetector.detect()) {
+					musicMode.beat();
+				} else {
+					musicMode.maintain();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		System.out.println("MusicModeController Thread is donne");

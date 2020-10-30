@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.PortUnreachableException;
 import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -211,9 +212,18 @@ public class Settings {
 	 *
 	 * This should not be called regularly since discovering takes a bit of time, see {@link Bridge#discoverBridges()}
 	 *
-	 * @throws SocketException Throws a SocketException if {@link Bridge#discoverBridges()} is unable to open up a new socket.
+	 * @throws	SocketException
+	 * 			Throws a SocketException if {@link Bridge#discoverBridges()} is unable to open up a new socket.
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void resetPossibleBridgeIpAddresses() throws SocketException {
+	public void resetPossibleBridgeIpAddresses() throws IOException {
 		HashSet<String> bridges = Bridge.discoverBridges();
 		setPossibleBridgeIpAddresses(bridges.toArray(new String[bridges.size()]));
 	}

@@ -2,6 +2,7 @@ package bridge;
 
 import java.io.IOException;
 import java.net.*;
+import java.nio.channels.IllegalBlockingModeException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -28,26 +29,48 @@ public class Bridge {
 	private boolean automaticallyRestartSession = true;
 
 	/**
-	 * @param ip Bridge ip
-	 * @param port port of the Bridge
-	 * @param keepAlive keep the session alive? default: false
-	 *                  Starts a new Thread that keeps the session alive by sending a Message every 5 seconds. This message does not affect the lights.
-	 *                  Note: The session will also automatically be restarted if it is lost, so keepAlive is not required.
-	 * @param timeout timeout in milliseconds for receiving answers from the bridge
+	 * @param	ip		Bridge ip
+	 * @param	port	port of the Bridge
+	 * @param	keepAlive keep the session alive? default: false
+	 * 					Starts a new Thread that keeps the session alive by sending a Message every 5 seconds. This message does not affect the lights.
+	 * 					Note: The session will also automatically be restarted if it is lost, so keepAlive is not required.
+	 * @param	timeout	timeout in milliseconds for receiving answers from the bridge
+	 *
+	 * @throws	BridgeException
+	 * 			If {@code maxAttempts} is reached and the session is still not alive, a BridgeException is thrown.
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public Bridge (String ip, Integer port, Boolean keepAlive, int timeout) throws UnknownHostException, BridgeException {
+	public Bridge (String ip, Integer port, Boolean keepAlive, int timeout) throws IOException, BridgeException {
 		this(InetAddress.getByName(ip), port, keepAlive, timeout);
 	}
 
 	/**
-	 * @param ip Bridge ip
-	 * @param port port of the Bridge
-	 * @param keepAlive keep the session alive? default: false
-	 *                  Starts a new Thread that keeps the session alive by sending a message every 5 seconds. This message does not affect the lights.
-	 *                  Note: The session will also automatically be restarted if it is lost, so keepAlive is not required.
-	 * @param timeout timeout in milliseconds for receiving answers from the bridge. A timeout of zero is interpreted as an infinite timeout.
+	 * @param	ip		Bridge ip
+	 * @param	port	port of the Bridge
+	 * @param	keepAlive keep the session alive? default: false
+	 *                 	Starts a new Thread that keeps the session alive by sending a message every 5 seconds. This message does not affect the lights.
+	 *                 	Note: The session will also automatically be restarted if it is lost, so keepAlive is not required.
+	 * @param	timeout	timeout in milliseconds for receiving answers from the bridge. A timeout of zero is interpreted as an infinite timeout.
+	 *
+	 * @throws	BridgeException
+	 * 			If {@code maxAttempts} is reached and the session is still not alive, a BridgeException is thrown.
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public Bridge (InetAddress ip, Integer port, Boolean keepAlive, int timeout) throws BridgeException {
+	public Bridge (InetAddress ip, Integer port, Boolean keepAlive, int timeout) throws BridgeException, IOException {
 		System.out.println("Initializing Bridge at " + ip + ":" + port);
 		this.port = port;
 		this.sequentialByte = 1;
@@ -69,8 +92,17 @@ public class Bridge {
 	 * Turns on lights in the selected zone
 	 *
 	 * @param zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void turnOn (Zone zone) {
+	public void turnOn (Zone zone) throws IOException {
 		System.out.println("\nTurn " + zone + " zone/s on");
 		sendData(createData(1,zone.gebByte()));
 	}
@@ -78,9 +110,18 @@ public class Bridge {
 	/**
 	 * Turns off all Lights in the selected zone
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void turnOff (Zone zone) {
+	public void turnOff (Zone zone) throws IOException {
 		System.out.println("\nTurn " + zone + " zone/s off");
 		sendData(createData(2,zone.gebByte()));
 	}
@@ -89,9 +130,18 @@ public class Bridge {
 	/**
 	 * Turns on Night mode in the selected zone
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void nightLight (Zone zone) {
+	public void nightLight (Zone zone) throws IOException {
 		System.out.println("\nTurn night light for " + zone + " zone/s on");
 		sendData(createData(3,zone.gebByte()));
 	}
@@ -99,9 +149,18 @@ public class Bridge {
 	/**
 	 * Turns on white light in the selected zone
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void turnOnWhiteLight (Zone zone) {
+	public void turnOnWhiteLight (Zone zone) throws IOException {
 		System.out.println("\nTurning on white light in zone  " + zone);
 		sendData(createData(4,zone.gebByte()));
 	}
@@ -110,9 +169,18 @@ public class Bridge {
 	 * Changes the color to the given value
 	 * 0x1C = Red, D9 = Lavender, BA = Blue, 85 = Aqua, 7A = Green, 54 = Lime, 3B = Yellow, 0x25 = Orange
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColor (Zone zone, byte color) {
+	public void setColor (Zone zone, byte color) throws IOException {
 		System.out.println("\nSet color in " + zone + " to " + bytesToHexString(color));
 		sendData(createData(5,zone.gebByte(), color));
 	}
@@ -120,9 +188,18 @@ public class Bridge {
 	/**
 	 * Changes the color to Blue
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToBlue (Zone zone) {
+	public void setColorToBlue (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to blue");
 		sendData(createData(5,zone.gebByte(),(byte) 0xBA));
 	}
@@ -130,9 +207,18 @@ public class Bridge {
 	/**
 	 * Changes the color to Red
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToRed (Zone zone) {
+	public void setColorToRed (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to red");
 		sendData(createData(5,zone.gebByte(),(byte) 0x1C));
 	}
@@ -140,9 +226,18 @@ public class Bridge {
 	/**
 	 * Changes the color to lavender
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToLavender (Zone zone) {
+	public void setColorToLavender (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to lavender");
 		sendData(createData(5,zone.gebByte(),(byte) 0xD9));
 	}
@@ -150,9 +245,18 @@ public class Bridge {
 	/**
 	 * Changes the color to aqua
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToAqua (Zone zone) {
+	public void setColorToAqua (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to aqua");
 		sendData(createData(5,zone.gebByte(),(byte) 0x85));
 	}
@@ -160,9 +264,18 @@ public class Bridge {
 	/**
 	 * Changes the color to green
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToGreen (Zone zone) {
+	public void setColorToGreen (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to green");
 		sendData(createData(5,zone.gebByte(),(byte) 0x7A));
 	}
@@ -170,9 +283,18 @@ public class Bridge {
 	/**
 	 * Changes the color to lime
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToLime (Zone zone) {
+	public void setColorToLime (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to lime");
 		sendData(createData(5,zone.gebByte(),(byte) 0x54));
 	}
@@ -180,9 +302,18 @@ public class Bridge {
 	/**
 	 * Changes the color to yellow
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToYellow (Zone zone) {
+	public void setColorToYellow (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to yellow");
 		sendData(createData(5,zone.gebByte(),(byte) 0x3B));
 	}
@@ -190,9 +321,18 @@ public class Bridge {
 	/**
 	 * Changes the color to orange
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setColorToOrange (Zone zone) {
+	public void setColorToOrange (Zone zone) throws IOException {
 		System.out.println("\nSet color in " + zone + " to orange");
 		sendData(createData(5,zone.gebByte(),(byte) 0x25));
 	}
@@ -201,10 +341,19 @@ public class Bridge {
 	/**
 	 * Set saturation to value
 	 *
-	 * @param zone zone in which the command should be applied
-	 * @param saturation saturation between 0 and 100 in percent
+	 * @param	zone zone in which the command should be applied
+	 * @param	saturation saturation between 0 and 100 in percent
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setSaturation (Zone zone, int saturation) {
+	public void setSaturation (Zone zone, int saturation) throws IOException {
 		System.out.println("\nSet saturation in " + zone + " to " + (int) convertPercentage(saturation) + "%");
 		sendData(createData(6, zone.gebByte(), convertPercentage(saturation)));
 	}
@@ -212,10 +361,19 @@ public class Bridge {
 	/**
 	 * Set brightness to given percentage
 	 *
-	 * @param zone zone in which the command should be applied
-	 * @param brightness brightness between 0 and 100 in percent
+	 * @param	zone zone in which the command should be applied
+	 * @param	brightness brightness between 0 and 100 in percent
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setBrightness (Zone zone, int brightness) {
+	public void setBrightness (Zone zone, int brightness) throws IOException {
 		System.out.println("\nSet brightness in " + zone + " to " + (int) convertPercentage(brightness) + "%");
 		sendData(createData(7, zone.gebByte(), convertPercentage(brightness)));
 	}
@@ -228,10 +386,19 @@ public class Bridge {
 	 * Note:
 	 * Because of Hardware restrictions this function is not tested. Please contact me if your Lights support different kelvin levels (Warm White & Cool White)
 	 *
-	 * @param zone zone in which the command should be applied
-	 * @param kelvin kelvin between 0 and 100 in percent
+	 * @param	zone zone in which the command should be applied
+	 * @param	kelvin kelvin between 0 and 100 in percent
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setKelvin (Zone zone, int kelvin) {
+	public void setKelvin (Zone zone, int kelvin) throws IOException {
 		System.out.println("\nSet kelvin in " + zone + " to " + convertPercentage(kelvin) + "%");
 		sendData(createData(8, zone.gebByte(), convertPercentage(kelvin)));
 	}
@@ -240,10 +407,19 @@ public class Bridge {
 	 * Starts the build in mode with the given number
 	 * The speed can be set using the methods {@link Bridge#increaseSpeed} and {@link Bridge#decreaseSpeed)}
 	 *
-	 * @param zone zone in which the command should be applied
-	 * @param mode Control.Mode
+	 * @param	zone zone in which the command should be applied
+	 * @param	mode Control.Mode
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setMode (Zone zone, Mode mode) {
+	public void setMode (Zone zone, Mode mode) throws IOException {
 		System.out.println("\nSet mode in " + zone + " to mode  " + mode);
 		sendData(createData(9,zone.gebByte(), mode.gebByte()));
 	}
@@ -252,10 +428,19 @@ public class Bridge {
 	 * Starts the mode with the given number
 	 * The speed can be set using the methods {@link Bridge#increaseSpeed} and {@link Bridge#decreaseSpeed)}
 	 *
-	 * @param zone zone in which the command should be applied
-	 * @param modeNr Number of mode to start. In case there is no mode with the given number the bridge will probably ignore the command
+	 * @param	zone zone in which the command should be applied
+	 * @param	modeNr Number of mode to start. In case there is no mode with the given number the bridge will probably ignore the command
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void setMode (Zone zone, int modeNr) {
+	public void setMode (Zone zone, int modeNr) throws IOException {
 		System.out.println("\nSet mode in " + zone + " to mode nr " + modeNr);
 		sendData(createData(9,zone.gebByte(),(byte) modeNr));
 	}
@@ -263,9 +448,18 @@ public class Bridge {
 	/**
 	 * Increase speed of current mode
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void increaseSpeed (Zone zone) {
+	public void increaseSpeed (Zone zone) throws IOException {
 		System.out.println("\nIncrease speed in " + zone);
 		sendData(createData(10,zone.gebByte()));
 	}
@@ -273,9 +467,18 @@ public class Bridge {
 	/**
 	 * Decrease speed of current mode
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void decreaseSpeed (Zone zone) {
+	public void decreaseSpeed (Zone zone) throws IOException {
 		System.out.println("\nDecrease speed in " + zone);
 		sendData(createData(11,zone.gebByte()));
 	}
@@ -284,10 +487,19 @@ public class Bridge {
 	 * Links a light to the selected zone. 
 	 * Please refer to your manual for this step, but in general it should work as follows:
 	 * Plug your light in to a power source and within 3 seconds use this command to link the Light to the selected zone.
-	 * 
-	 * @param zone zone in which the command should be applied
+	 *
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void linkLightsToZone (Zone zone) {
+	public void linkLightsToZone (Zone zone) throws IOException {
 		System.out.println("\nLinking Light to " + zone);
 		sendData(createData(12, zone.gebByte()));
 	}
@@ -297,9 +509,18 @@ public class Bridge {
 	 * Please refer to your manual for this step, but in general it should work as follows:
 	 * Plug your light in to a power source and within 3 seconds use this command to unlink the Light to the selected zone.
 	 *
-	 * @param zone zone in which the command should be applied
+	 * @param	zone zone in which the command should be applied
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public void unlinkLightsToZone (Zone zone) {
+	public void unlinkLightsToZone (Zone zone) throws IOException {
 		System.out.println("\nUnlink Light from " + zone);
 		sendData(createData(13, zone.gebByte()));
 	}
@@ -307,8 +528,17 @@ public class Bridge {
 
 	/**
 	 * Sends a keep alive message
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	private void keepAlive () {
+	private void keepAlive () throws IOException {
 		System.out.println("~~ sending keep alive message");
 		sendData(new byte[]{(byte) 0xD0, 0x00, 0x00, 0x00, 0x02, wifiBridgeSessionID1, wifiBridgeSessionID2});
 	}
@@ -335,10 +565,19 @@ public class Bridge {
 	 * Discovers all v6 and v5 bridges in the network.
 	 * Please note that no part of this software was tested with v5 bridges. See README.md.
 	 *
-	 * @return null if an error occurred, otherwise a set containing the ip addresses of all v6 and v5 bridges in the local network.
-	 * @throws SocketException Throws an SocketException if unable to open new DatagramSocket
+	 * @return	null if an error occurred, otherwise a set containing the ip addresses of all v6 and v5 bridges in the local network.
+	 *
+	 * @throws	SocketException Throws an SocketException if unable to open new DatagramSocket
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	public static HashSet<String> discoverBridges() throws SocketException {
+	public static HashSet<String> discoverBridges() throws IOException {
 		byte[] b1 = "HF-A11ASSISTHREAD".getBytes(StandardCharsets.UTF_8);	// Discover v6 Bridges.
 		byte[] b2 = "Link_Wi-Fi".getBytes(StandardCharsets.UTF_8);			// Discover v5 Bridges.
 		byte[] receivedData = new byte[32];
@@ -366,12 +605,13 @@ public class Bridge {
 			try {
 				socket.send(sendPacketV6);
 				socket.send(sendPacketV5);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException ignored) {
+				break;
 			}
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ignored) {
+				return null;
 			}
 		}
 
@@ -379,7 +619,7 @@ public class Bridge {
 		while(true) {
 			try {
 				socket.receive(receivePacket);
-			} catch (IOException ignored) {
+			} catch (SocketTimeoutException ignored) {
 				break;
 			}
 			ip = new String(receivedData, StandardCharsets.UTF_8);
@@ -395,8 +635,17 @@ public class Bridge {
 	 *
 	 * @param data data that will be send to the bridge
 	 * @return received answer from the bridge. Null if timeout is reached
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	private byte[] sendData (byte[] data) {
+	private byte[] sendData (byte[] data) throws IOException {
 		byte[] receiveData = new byte[32];
 
 		DatagramPacket sendPacket = new DatagramPacket(data, data.length, bridgeIp, port);
@@ -404,19 +653,24 @@ public class Bridge {
 
 		System.out.println("\nattempting to send: " + bytesToHexString(sendPacket.getData()));
 
+		// TODO: resend message if session is lost
 		try {
 			socket.send(sendPacket);
-		} catch (IOException e) {
-			// TODO Exception handling
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			System.exit(1);
+		} catch (IllegalBlockingModeException e) {
 			e.printStackTrace();
 		}
 
 		try {
 			socket.receive(receivePacket);
-		} catch (IOException e) {
-			// Sometimes the bridge does not answer.
-			e.printStackTrace();
+		} catch (SocketTimeoutException ignored) {
+			// Catch the SocketTimeoutException but pass the IOException to the caller
+			System.out.println("SocketTimeoutException: receiving a message failed");
 			return null;
+		} catch (IllegalBlockingModeException e) {
+			e.printStackTrace();
 		}
 
 		String modifiedSentence = bytesToHexString(receivePacket.getData());
@@ -445,12 +699,22 @@ public class Bridge {
 	/**
 	 * Sends data to the bridge and retries if no answer is received.
 	 *
-	 * @param data data that will be send to the bridge
-	 * @param maxAttempts maximum number of attempts to send and receive data. If this value is lower than 2 it will be set to 2. In case only one attempt is wanted, use sendData().
-	 * @param waitBeforeRetry Waits for waitBeforeRetry milliseconds before retry. must be greater than or equal to 0
-	 * @return received answer from the bridge. Null if timeout is reached
+	 * @param	data data that will be send to the bridge
+	 * @param	maxAttempts maximum number of attempts to send and receive data. If this value is lower than 2 it will be set to 2. In case only one attempt is wanted, use sendData().
+	 * @param	waitBeforeRetry Waits for waitBeforeRetry milliseconds before retry. must be greater than or equal to 0
+	 *
+	 * @return	received answer from the bridge. Null if timeout is reached
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	private byte[] sendDataRetry (byte[] data, int maxAttempts, int waitBeforeRetry) {
+	private byte[] sendDataRetry (byte[] data, int maxAttempts, int waitBeforeRetry) throws IOException {
 		if (waitBeforeRetry < 0) {
 			waitBeforeRetry = 75;
 		}
@@ -470,7 +734,9 @@ public class Bridge {
 				System.out.println("### Failed to receive answer from bridge. Attempt: " + (attempt + 1) + " of: " + maxAttempts + " ###");
 				try {
 					Thread.sleep(waitBeforeRetry);
-				} catch (InterruptedException ignored) {}
+				} catch (InterruptedException ignored) {
+					break;
+				}
 			}
 		}
 		return received;
@@ -503,9 +769,9 @@ public class Bridge {
 	 * 	- 9 : set Mode
 	 */
 	private byte[] createData(int commandNr, byte zone) {
-		// if the commandNr requires an additional value TODO: Exception?
+		// if the commandNr requires an additional value
 		if (commandNr == 5 || commandNr == 6 || commandNr == 7 || commandNr == 8 || commandNr == 9) {
-			System.out.println("\n ### WARNING ###\ncommandNr: " + commandNr + " requires an additional parameter!\n ### END WARNING ###");
+			System.err.println("\n ### WARNING ###\ncommandNr: " + commandNr + " requires an additional parameter!\n ### END WARNING ###");
 		}
 		return createData(commandNr, zone, (byte) 0);
 	}
@@ -679,9 +945,19 @@ public class Bridge {
 	 * Increases the response timeout temporarily
 	 *
 	 * @param maxAttempts max attempts to restart the session.
-	 * @throws BridgeException If {@code maxAttempts} is reached and the session is still not alive, a BridgeException is thrown.
+	 *
+	 * @throws	BridgeException
+	 * 			If {@code maxAttempts} is reached and the session is still not alive, a BridgeException is thrown.
+	 * @throws	IOException
+	 * 			if an I/O error occurs.
+	 * @throws	PortUnreachableException
+	 * 			may be thrown if bridge is currently unreachable. Note, there is no
+	 * 			guarantee that the exception will be thrown.
+	 * @throws	SecurityException
+	 * 			if a security manager exists and its {@code checkMulticast}
+	 * 			or {@code checkConnect} method doesn't allow the send.
 	 */
-	private void startNewSession(int maxAttempts) throws BridgeException {
+	private void startNewSession(int maxAttempts) throws BridgeException, IOException {
 		// Backup and disable automaticallyRestartSession to avoid a loop;
 		boolean autoRestBackup = automaticallyRestartSession;
 		automaticallyRestartSession = false;
@@ -718,10 +994,8 @@ public class Bridge {
 				try {
 					Thread.sleep(250);
 				} catch (InterruptedException e) {
-					// TODO Error handling when failed to create a new session
-					System.err.println("FAILED TO START A NEW SESSION");
 					e.printStackTrace();
-					System.exit(1);
+					break;
 				}
 			}
 		}
@@ -757,7 +1031,12 @@ public class Bridge {
 	private void startKeepAliveThread() {
 		new Thread(() -> {
 			while (true) {
-				keepAlive();
+				try {
+					keepAlive();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
 				try {
 					Thread.sleep(5000);
 				} catch (InterruptedException e) {

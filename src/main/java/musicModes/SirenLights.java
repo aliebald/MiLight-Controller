@@ -3,6 +3,8 @@ package musicModes;
 import bridge.Bridge;
 import bridge.Zone;
 
+import java.io.IOException;
+
 /**
  * SirenLights MusicMode
  *
@@ -12,14 +14,14 @@ public class SirenLights implements MusicMode {
 	private Bridge bridge;
 	private byte run = 0;
 
-	public SirenLights(Bridge bridge) {
+	public SirenLights(Bridge bridge) throws IOException {
 		this.bridge = bridge;
 		bridge.turnOn(Zone.ALL);
 		bridge.setBrightness(Zone.ALL,100);
 	}
 
 	@Override
-	public void beat() {
+	public void beat() throws IOException {
 		System.out.println("SirenLights.beat run = " + run);
 		switch (run) {
 			case 0: {
