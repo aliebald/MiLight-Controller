@@ -140,39 +140,27 @@
 			</div>
 		</div>
 		<!-- Top Bar -->
-		<div class="py-3 container-fluid ml-3 mr-3">
+		<div class="py-3 container-xl">
 			<div class="row topBar">
-				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
-					<!--
-					<span class="textDark pr-2">
-						Speed:
-					</span>
-					<input type="number" min="50" max="1000" value="100" class="speedNumber mr-2" id="speedNumber">
-					<input type="range"  min="50" max="1000" value="100" class="speedSlider" id="speedSlider">
-					<div class="align-items-center pl-2">
-						<button type="button" onclick="" class="btn btn-secondary textDark">
-							set	
-						</button>
-					</div>
-					-->
+				<div class="col-4">
 				</div>
-				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 d-flex align-items-center justify-content-center textDark my-1">
-					<span class="mr-1">
+				<div class="col-4 d-flex align-items-center justify-content-center textDark my-1">
+					<span class="mx-1">
 						<button type="button"  onclick="sendCommand('turnOn')" class="btn btn-secondary textDark">&nbsp;On&nbsp;</button>
 					</span>
-					<span class="mr-3">
+					<span class="mx-1">
 						<button type="button"  onclick="sendCommand('turnOff')" class="btn btn-secondary textDark">&nbsp;Off&nbsp;</button>
 					</span>
 				</div>
-				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 d-flex align-items-center justify-content-end textDark my-1">
+				<div class="col-4 d-flex align-items-center justify-content-end textDark my-1">
 					<i class="fas fa-bars fa-2x pr-2" onclick="toggleNav()"></i>
 				</div>
 			</div>
 		</div>
 
-		<div class="container-fluid">
+		<div class="container-xl">
 			<div class="row">
-				<div class="col-lg col-md-12 col-sm-12 section ml-3 mr-3 my-2">
+				<div class="col-lg col-md-12 col-sm-12 section mr-md-3 my-2">
 					<div class="row">
 						<!-- Color picker and brightness-->
 						<div class="col-4 py-2 sliderCollection">
@@ -190,44 +178,10 @@
 					</div>
 					<!-- colors -->
 					<div class="row pt-2" id="colorButtons">
-						<!--
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorRed')" class="btn color" style="background: red">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorGreen')" class="btn color" style="background: green">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorBlue')" class="btn color" style="background: blue">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorOrange')" class="btn color" style="background: orange">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorYellow')" class="btn color" style="background: yellow">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorLavender')" class="btn color" style="background: lavender">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorAqua')" class="btn color" style="background: aqua">
-							</button>
-						</div>
-						<div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 py-2">
-							<button type="button" onclick="sendCommand('setColorLime')" class="btn color" style="background: lime">
-							</button>
-						</div>
-						-->
 						<!-- custom colors -->
 
 						<!-- Add custom color button -->
-						<div class="col-xl-3 col-lg-4 col-md-4 col-sm-6 py-2">
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2">
 							<button type="button" onclick="addCustomColor()" class="btn addColor" style="background: red;" id="addCustomColorButton">
 								<i class="fas fa-plus addCustomColorButton"></i>
 							</button>
@@ -245,7 +199,7 @@
 					<!-- Bridge selector / Zones -->
 					<div class="row">
 						<div class="col-12 py-3 text-center" style="display: inline">
-							<span class="textDark pr-2 pt-2">
+							<span class="textDark responsiveText pr-2 pt-2">
 								Zones:
 							</span>
 							<div class="btn-group" role="group" aria-label="Basic example">
@@ -259,14 +213,14 @@
 					</div>
 				</div>
 				<!-- Modes -->
-				<div class="col-lg col-md-12 col-sm-12 section ml-3 mr-3 my-2">
+				<div class="col-lg col-md-12 col-sm-12 section my-2">
 					<!-- navigation tabs -->
 					<ul class="nav nav-pills nav-fill modeSelector pt-2 pb-2" id="pills-tab" role="tablist">
-						<li class="nav-item">
-							<a class="nav-link active textDark" id="buildInModes-tab" data-toggle="pill" href="#buildInModes" role="tab" aria-controls="pills-home" aria-selected="true">Build in Modes</a>
+						<li class="nav-item noBorderRadiusRight">
+							<a class="nav-link d-flex justify-content-center align-items-center noBorderRadiusRight textDark active" id="buildInModes-tab" data-toggle="pill" href="#buildInModes" role="tab" aria-controls="pills-home" aria-selected="true">Build in Modes</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link textDark" id="musicModes-tab" data-toggle="pill" href="#musicModes" role="tab" aria-controls="pills-profile" aria-selected="false">Music Modes</a>
+						<li class="nav-item noBorderRadiusLeft">
+							<a class="nav-link d-flex justify-content-center align-items-center noBorderRadiusLeft textDark" id="musicModes-tab" data-toggle="pill" href="#musicModes" role="tab" aria-controls="pills-profile" aria-selected="false">Music Modes</a>
 						</li>
 					</ul>
 					<!-- Content -->
@@ -275,7 +229,7 @@
 						<div class="container modeTabs tab-pane fade show textDark active" id="buildInModes" role="tabpanel" aria-labelledby="buildInModes-tab">
 							<div class="row justify-content-center py-2">
 								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('decreaseSpeed')">&nbsp;&nbsp;-&nbsp;&nbsp;</button>
-								<span class="align-middle py-2">&nbsp;&nbsp;Speed&nbsp;&nbsp;</span>
+								<span class="align-middle d-flex align-items-center py-2 responsiveText">&nbsp;&nbsp;Speed&nbsp;&nbsp;</span>
 								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('increaseSpeed')">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
 							</div>
 							<div class="row">
