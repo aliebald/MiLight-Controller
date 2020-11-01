@@ -251,11 +251,6 @@
 					<div class="tab-content" id="pills-tabContent">
 						<!-- Content for buildIn modes -->
 						<div class="container modeTabs tab-pane fade show textDark active" id="buildInModes" role="tabpanel" aria-labelledby="buildInModes-tab">
-							<div class="row justify-content-center py-2">
-								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('decreaseSpeed')">&nbsp;&nbsp;-&nbsp;&nbsp;</button>
-								<span class="align-middle d-flex align-items-center py-2 responsiveText">&nbsp;&nbsp;Speed&nbsp;&nbsp;</span>
-								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('increaseSpeed')">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
-							</div>
 							<div class="row">
 								<div class="col-12">
 									<div class="list-group modesList" id="buildInModes-tab-tabs" role="tablist">
@@ -269,15 +264,22 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-12 pt-2 pb-3">
-								<div class="tab-content" id="nav-tabContent">
-									<div class="tab-pane fade" id="colorWheelInfo" 			role="tabpanel" aria-labelledby="colorWheelTab">ColorWheel</div>
-									<div class="tab-pane fade" id="breathingColorWheelInfo" role="tabpanel" aria-labelledby="breathingColorWheelTab">BreathingColorWheel</div>
-									<div class="tab-pane fade" id="partyInfo" 				role="tabpanel" aria-labelledby="partyTab">Party</div>
-									<div class="tab-pane fade" id="partyMultipleColorsInfo" role="tabpanel" aria-labelledby="partyMultipleColorsTab">PartyMultipleColors</div>
-									<div class="tab-pane fade" id="flashRedInfo" 			role="tabpanel" aria-labelledby="flashRedTab">FlashRed</div>
-									<div class="tab-pane fade" id="flashGreenInfo" 			role="tabpanel" aria-labelledby="flashGreenTab">FlashGreen</div>
-									<div class="tab-pane fade" id="flashBlueInfo" 			role="tabpanel" aria-labelledby="flashBlueTab">FlashBlue</div>
+							<div class="row justify-content-center py-2">
+								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('decreaseSpeed')">&nbsp;&nbsp;-&nbsp;&nbsp;</button>
+								<span class="align-middle d-flex align-items-center py-2 responsiveText">&nbsp;&nbsp;Speed&nbsp;&nbsp;</span>
+								<button type="button" class="btn btn-secondary py-2" onclick="sendCommand('increaseSpeed')">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+							</div>
+							<div class="row">
+								<div class="col-12 py-2 d-flex align-items-center">
+									<div class="tab-content" id="nav-tabContent">
+										<div class="tab-pane fade" id="colorWheelInfo" 			role="tabpanel" aria-labelledby="colorWheelTab">ColorWheel</div>
+										<div class="tab-pane fade" id="breathingColorWheelInfo" role="tabpanel" aria-labelledby="breathingColorWheelTab">BreathingColorWheel</div>
+										<div class="tab-pane fade" id="partyInfo" 				role="tabpanel" aria-labelledby="partyTab">Party</div>
+										<div class="tab-pane fade" id="partyMultipleColorsInfo" role="tabpanel" aria-labelledby="partyMultipleColorsTab">PartyMultipleColors</div>
+										<div class="tab-pane fade" id="flashRedInfo" 			role="tabpanel" aria-labelledby="flashRedTab">FlashRed</div>
+										<div class="tab-pane fade" id="flashGreenInfo" 			role="tabpanel" aria-labelledby="flashGreenTab">FlashGreen</div>
+										<div class="tab-pane fade" id="flashBlueInfo" 			role="tabpanel" aria-labelledby="flashBlueTab">FlashBlue</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -296,7 +298,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-12 py-3 d-flex align-items-center">
+								<div class="col-12 py-2 d-flex align-items-center">
 									<span class="textDark pr-2">
 										Beat&nbsp;cooldown:
 									</span>
