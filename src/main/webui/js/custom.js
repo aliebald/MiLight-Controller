@@ -409,28 +409,37 @@ document.getElementById("flashBlueTab").onclick = function () {
 }
 
 // Mode selector tabs: music modes
+function setMusicMode(musicMode, elemID) {
+	console.log("setMusicMode("+musicMode+", "+elemID+");")
+	if(settings.activeTargetDataLine !== "none") {
+		sendCommand("setMode:M" + musicMode);
+	} else {
+		$('#missingAudioInputError').toast('show');
+	}
+}
+
 document.getElementById("cyclicLightsTab").onclick = function () {
-	sendCommand("setMode:MCyclic");
+	setMusicMode("Cyclic", "cyclicLightsTab");
 }
 
 document.getElementById("cyclicLightsMCTab").onclick = function () {
-	sendCommand('setMode:MCyclicMultipleColors');
+	setMusicMode("CyclicMultipleColors", "cyclicLightsMCTab");
 }
 
 document.getElementById("flashingLightsTab").onclick = function () {
-	sendCommand("setMode:MFlashing");
+	setMusicMode("Flashing", "flashingLightsTab");
 }
 
 document.getElementById("pulseLightTab").onclick = function () {
-	sendCommand("setMode:MPulse");
+	setMusicMode("Pulse", "pulseLightTab");
 }
 
 document.getElementById("sequentialLightsTab").onclick = function () {
-	sendCommand("setMode:MSequential");
+	setMusicMode("Sequential", "sequentialLightsTab");
 }
 
 document.getElementById("sirenLightsTab").onclick = function () {
-	sendCommand("setMode:MSiren");
+	setMusicMode("Siren", "sirenLightsTab");
 }
 
 // TODO find a way around this
