@@ -233,14 +233,13 @@ input[type=number]:hover {
 	padding-top: 60px;
 	background-color: #f2f2f2;
 	top: 0;
-	left: 0;
+	right: 0;
 	z-index: 2;
 	overflow-x: hidden;
 	transition: 0.5s;
 }
 
-.sidenav a.sidenav-btn, .sidenav .closebtn {
-	padding: 8px 8px 8px 32px;
+.sidenav a.sidenavBtn, .sidenav .closeBtn {
 	text-decoration: none;
 	font-size: 25px;
 	color: #6c757d;
@@ -248,30 +247,29 @@ input[type=number]:hover {
 	transition: 0.3s;
 }
 
-.sidenav a:hover, .sidenav .nav-link:hover, .sidenav .nav-symbol:hover {
+.sidenav a.sidenavBtn {
+	padding: 8px 35px 8px 8px;
+	text-align: right;
+}
+
+.sidenav a:hover, .sidenav .nav-link:hover, .sidenav .navSymbol:hover {
 	color: black;
 }
 
-.sidenav .closebtn {
+.sidenav .closeBtn {
 	position: absolute;
 	top: 0;
-	right: 25px;
 	font-size: 36px;
-	margin-left: 50px;
+	margin-left: 20px;
 }
 
-@media screen and (max-height: 450px) {
-	.sidenav {padding-top: 15px;}
-	.sidenav a {font-size: 18px;}
-}
-
-.sidenav .nav-symbol {
+.sidenav .navSymbol {
 	font-size: 25px;
 	position: absolute;
-	right: 20px;
+	left: 20px;
 	bottom: 20px;
 	color: #6c757d;
-	padding-right: 15px;
+	padding-left: 15px;
 }
 
 .sidenav .nav-link:hover {
@@ -327,6 +325,14 @@ input[type=number]:hover {
 
 	.responsiveText, .btn, .nav-link {
 		font-size: 1.25rem;
+	}
+
+	.sidenav {
+		padding-top: 15px;
+	}
+
+	.sidenav a {
+		font-size: 18px;
 	}
 }
 
