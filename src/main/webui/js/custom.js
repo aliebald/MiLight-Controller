@@ -95,6 +95,12 @@ function send(url, method, contentType, message, replyFunction) {
 			document.getElementById("response").innerHTML = this.responseText;
 			console.log(this.responseText);
 			replyFunction(this.responseText);
+
+			// Show error toast if response starts with ERROR
+			if(this.responseText.startsWith("ERROR")) {
+				document.getElementById("generalCommunicationErrorMessage").innerHTML = this.responseText;
+				$('#generalCommunicationError').toast('show');
+			}
 		}
 	};
 
@@ -238,6 +244,11 @@ function settingsReady (set) {
 	targetDataLineSelector.value	= settings.activeTargetDataLine;
 
 	showCustomColors();
+
+	// If no bridge is selected, show settings
+	if (settings.bridgeIpAddress === "") {
+		$('#settingsModal').modal('show');
+	}
 }
 
 function applySettings() {
