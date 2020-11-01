@@ -312,11 +312,11 @@ public class HttpWebServer {
 				}
 				case "decreaseSpeed": {
 					bridge.decreaseSpeed(zone);
-					break;
+					return "decreased speed";
 				}
 				case "increaseSpeed": {
 					bridge.increaseSpeed(zone);
-					break;
+					return "increased speed";
 				}
 			}
 
