@@ -8,6 +8,7 @@
 	"beatCooldown": 100,
 
 	"clientSettings": {
+		"debugMode": true,
 		"customColors": [
 			{
 				"hsl": {

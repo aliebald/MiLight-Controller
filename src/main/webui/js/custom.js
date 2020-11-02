@@ -201,6 +201,7 @@ send("settings.json", "GET", "application/json;", "settings.json", settingsReady
 function settingsReady (set) {
 	settings = JSON.parse(set);
 
+	document.getElementById("debugMode").checked 			= settings.clientSettings.debugMode;
 	document.getElementById('openBrowserOnStart').checked	= settings.openBrowserOnStart;
 	document.getElementById('bridgePort').valueAsNumber	= settings.bridgePort;
 
@@ -249,14 +250,22 @@ function settingsReady (set) {
 	if (settings.bridgeIpAddress === "") {
 		$('#settingsModal').modal('show');
 	}
+
+	// check if debug mode is enabled
+	if (settings.clientSettings.debugMode) {
+		document.getElementById("response").style.visibility = "visible";
+	} else {
+		document.getElementById("response").style.visibility = "hidden";
+	}
 }
 
 function applySettings() {
 	// update settings json
-	settings.activeTargetDataLine	= document.getElementById('activeTargetDataLine').value;
-	settings.openBrowserOnStart		= document.getElementById('openBrowserOnStart').checked;
-	settings.bridgeIpAddress		= document.getElementById('bridgeIpAddress').value;
-	settings.bridgePort				= document.getElementById('bridgePort').valueAsNumber;
+	settings.activeTargetDataLine		= document.getElementById('activeTargetDataLine').value;
+	settings.openBrowserOnStart			= document.getElementById('openBrowserOnStart').checked;
+	settings.clientSettings.debugMode	= document.getElementById("debugMode").checked;
+	settings.bridgeIpAddress			= document.getElementById('bridgeIpAddress').value;
+	settings.bridgePort					= document.getElementById('bridgePort').valueAsNumber;
 
 	// check if no bridge is selected
 	if (settings.bridgeIpAddress === "") {
@@ -389,6 +398,15 @@ function toggleColorEdit() {
 		delButtons[i].classList.toggle("noDisplay")
 	}
 }
+
+// debug checkbox
+document.getElementById("debugMode").addEventListener('change', function (event) {
+	if (event.target.checked) {
+		document.getElementById("response").style.visibility = "visible";
+	} else {
+		document.getElementById("response").style.visibility = "hidden";
+	}
+})
 
 //  Mode selector tabs: build in modes
 document.getElementById("colorWheelTab").onclick = function () {
