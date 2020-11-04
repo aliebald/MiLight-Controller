@@ -252,11 +252,7 @@ function settingsReady (set) {
 	}
 
 	// check if debug mode is enabled
-	if (settings.clientSettings.debugMode) {
-		document.getElementById("response").style.visibility = "visible";
-	} else {
-		document.getElementById("response").style.visibility = "hidden";
-	}
+	switchDebugMode();
 }
 
 function applySettings() {
@@ -264,8 +260,13 @@ function applySettings() {
 	settings.activeTargetDataLine		= document.getElementById('activeTargetDataLine').value;
 	settings.openBrowserOnStart			= document.getElementById('openBrowserOnStart').checked;
 	settings.clientSettings.debugMode	= document.getElementById("debugMode").checked;
-	settings.bridgeIpAddress			= document.getElementById('bridgeIpAddress').value;
 	settings.bridgePort					= document.getElementById('bridgePort').valueAsNumber;
+
+	if (document.getElementById("forceBridgeIpAddress").value !== "") {
+		settings.bridgeIpAddress = document.getElementById('forceBridgeIpAddress').value;
+	} else {
+		settings.bridgeIpAddress = document.getElementById('bridgeIpAddress').value;
+	}
 
 	// check if no bridge is selected
 	if (settings.bridgeIpAddress === "") {
@@ -401,12 +402,20 @@ function toggleColorEdit() {
 
 // debug checkbox
 document.getElementById("debugMode").addEventListener('change', function (event) {
-	if (event.target.checked) {
-		document.getElementById("response").style.visibility = "visible";
-	} else {
-		document.getElementById("response").style.visibility = "hidden";
-	}
+	settings.clientSettings.debugMode = event.target.checked;
+	switchDebugMode();
 })
+
+// sets visibility of debug elements
+function switchDebugMode () {
+	if (settings.clientSettings.debugMode) {
+		document.getElementById("response").style.visibility				= "visible";
+		document.getElementById("forceBridgeIpAddressElem").style.visibility	= "visible";
+	} else {
+		document.getElementById("response").style.visibility				= "hidden";
+		document.getElementById("forceBridgeIpAddressElem").style.visibility	= "hidden";
+	}
+}
 
 //  Mode selector tabs: build in modes
 document.getElementById("colorWheelTab").onclick = function () {

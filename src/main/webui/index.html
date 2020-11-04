@@ -70,6 +70,11 @@
 							<input type="checkbox" class="form-check-input" id="debugMode">
 							<label class="form-check-label" for="debugMode">Debug mode</label>
 						</div>
+						<!-- Force Bridge IP - Only visible in debug mode -->
+						<div class="form-group" id="forceBridgeIpAddressElem">
+							<label for="forceBridgeIpAddress">Force Bridge Ip Address (overrides ridge Ip Address)</label>
+							<input type="text" class="form-control" id="forceBridgeIpAddress" aria-describedby="bridgeIp">
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-danger" onclick="resetSettings()">&nbsp;Reset&nbsp;</button>
