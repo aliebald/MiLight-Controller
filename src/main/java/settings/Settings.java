@@ -22,7 +22,7 @@ import java.util.HashSet;
  */
 public class Settings {
 	private JSONObject settings;
-	private String path = ".\\src\\main\\resources\\";
+	private String path;
 
 	/**
 	 * Construct a new Settings object which handles server and client settings.
@@ -31,9 +31,10 @@ public class Settings {
 	 * @throws IOException Throws an if an error occurs when reading the settings
 	 * @throws SocketException Throws an SocketException if resetting possibleBridgeIpAddresses fails to open a new socket in {@link Bridge#discoverBridges()}.
 	 */
-	public Settings() throws IOException {
+	public Settings(String path) throws IOException {
+		this.path = path;
 		try {
-			settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "settings.json"))));
+			settings = new JSONObject(new String(Files.readAllBytes(Paths.get(this.path + "settings.json"))));
 			resetPossibleBridgeIpAddresses();
 			updatePossibleTargetDataLines();
 		} catch (IOException e) {

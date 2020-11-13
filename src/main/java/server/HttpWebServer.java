@@ -30,14 +30,13 @@ import java.util.LinkedList;
  */
 public class HttpWebServer {
 	private int port;
-	private final String path = ".\\src\\main\\webui";
 	private String site, customCSS, customJs;
 	private Bridge bridge;
 	private MusicModeController musicModeController;
 	private Thread mmcThread;
 	private Settings settings;
 
-	public HttpWebServer(int port, Settings settings) throws IOException {
+	public HttpWebServer(int port, Settings settings, String path) throws IOException {
 		this.port 		= port;
 		this.settings	= settings;
 
