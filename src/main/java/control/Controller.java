@@ -19,7 +19,7 @@ public class Controller {
 	private static final String webuiPath		= dev ? ".\\webui" : ".\\src\\main\\webui";
 	// Develop: ".\\src\\main\\resources\\"
 	// Release: ".\\settings\\"
-	private static final String settingsPath	= dev ? ".\\src\\main\\resources\\" : ".\\settings\\";
+	private static final String settingsPath	= dev ? ".\\src\\main\\resources" : ".\\settings";
 
 	private HttpWebServer server;
 	private Settings settings;

@@ -34,7 +34,7 @@ public class Settings {
 	public Settings(String path) throws IOException {
 		this.path = path;
 		try {
-			settings = new JSONObject(new String(Files.readAllBytes(Paths.get(this.path + "settings.json"))));
+			settings = new JSONObject(new String(Files.readAllBytes(Paths.get(this.path + "\\settings.json"))));
 			resetPossibleBridgeIpAddresses();
 			updatePossibleTargetDataLines();
 		} catch (IOException e) {
@@ -176,7 +176,7 @@ public class Settings {
 	 * @throws IOException throws an IOException if writing the file fails
 	 */
 	private void saveSettings() throws IOException {
-		FileWriter fw = new FileWriter(path + "settings.json");
+		FileWriter fw = new FileWriter(path + "\\settings.json");
 		fw.write(settings.toString(2));
 		fw.close();
 		System.out.println("saved settings.json");
@@ -189,7 +189,7 @@ public class Settings {
 	 * @throws SocketException Throws an SocketException if resetting possibleBridgeIpAddresses fails to open a new socket in {@link Bridge#discoverBridges()}.
 	 */
 	public void setToDefaultSettings() throws IOException {
-		settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "defaultSettings.json"))));
+		settings = new JSONObject(new String(Files.readAllBytes(Paths.get(path + "\\defaultSettings.json"))));
 		updatePossibleTargetDataLines();
 		resetPossibleBridgeIpAddresses();
 		saveSettings();
