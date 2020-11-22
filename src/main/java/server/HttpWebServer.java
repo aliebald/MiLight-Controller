@@ -104,6 +104,8 @@ public class HttpWebServer {
 		public void handle(HttpExchange t) throws IOException {
 			URI request = t.getRequestURI();
 			String response, requestBody = getRequestBody(t);
+			String mimeType = "text/plain";
+			boolean utf_8 = true;
 			System.out.println("requested: " + request + ", RequestMethod: " + t.getRequestMethod() + ", RequestBody: " + requestBody);
 
 			switch (request.getPath()) {
@@ -129,25 +131,34 @@ public class HttpWebServer {
 				}
 				case "/": {
 					response = site;
+					mimeType = "text/html";
 					System.out.println("	set the response to site");
 					break;
 				} case "/css/custom.css": {
 					response = customCSS;
+					mimeType = "text/css";
 					System.out.println("	set the response to customCSS");
 					break;
 				} case "/js/custom.js": {
 					response = customJs;
+					mimeType = "text/javascript";
 					System.out.println("	set the response to custom.js");
 					break;
 				} case "/favicon.ico": {
 					response = "";
+					mimeType = "image/vnd.microsoft.icon";
 					System.out.println("	return empty String. No favicon.ico right now");
 					break;
 				} case "/settings.json": {
 					response = settings.getSettings();
+					mimeType = "application/json";
+					utf_8 = false;
 					System.out.println("	return set to settings.json");
+					System.out.println("\n\n" + response + "\n\n");
 					break;
 				} case "/applySettings": {
+					mimeType = "application/json";
+					utf_8 = false;
 					response = applySettings(requestBody);
 					break;
 				} case "/resetSettings": {
@@ -157,6 +168,9 @@ public class HttpWebServer {
 					musicModeController = null;
 					setupBridgeAndMusicModeController();
 
+					mimeType = "application/json; charset=UTF-16";
+					utf_8 = false;
+					// TODO: change error to error as part of the json
 					response = settings.getSettings();
 					System.out.println("	return set to defaultSettings.json");
 					break;
@@ -167,10 +181,15 @@ public class HttpWebServer {
 				}
 			}
 
-			t.sendResponseHeaders(200, response.getBytes().length);
+			byte[] responseBytes = utf_8 ? response.getBytes(StandardCharsets.UTF_8) : response.getBytes(StandardCharsets.UTF_16);
+
+			System.out.println("Content-Type: " + mimeType + ", uft-8: " + utf_8);
+			t.getResponseHeaders().set("Content-Type", mimeType + "; charset=UTF-8");
+			t.sendResponseHeaders(200, responseBytes.length);
 			OutputStream os = t.getResponseBody();
-			os.write(response.getBytes());
+			os.write(responseBytes);
 			os.close();
+
 			System.out.println("############################################");
 		}
 
