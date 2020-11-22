@@ -16,7 +16,7 @@ public class Controller {
 
 	// Develop: ".\\src\\main\\webui"
 	// Release: ".\\webui"
-	private static final String webuiPath		= dev ? ".\\webui" : ".\\src\\main\\webui";
+	private static final String webuiPath		= dev ? ".\\src\\main\\webui" : ".\\webui";
 	// Develop: ".\\src\\main\\resources\\"
 	// Release: ".\\settings\\"
 	private static final String settingsPath	= dev ? ".\\src\\main\\resources" : ".\\settings";
