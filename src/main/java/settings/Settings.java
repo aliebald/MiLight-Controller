@@ -89,7 +89,7 @@ public class Settings {
 	 * @return true if setting was successfully updated. Even if it was updated to "none"
 	 */
 	public boolean setActiveTargetDataLine(String targetDataLine) {
-		if (BeatDetector.isValidTargetDataLine(targetDataLine) || targetDataLine.equals("none")) {
+		if (targetDataLine.equals("none") || BeatDetector.isValidTargetDataLine(targetDataLine)) {
 			settings.put("activeTargetDataLine", targetDataLine);
 		} else {
 			return false;
@@ -162,7 +162,10 @@ public class Settings {
 		setOpenBrowserOnStart(in.getBoolean("openBrowserOnStart"));
 		setBridgePort((Integer) in.getNumber("bridgePort"));
 		setBeatCooldown(in.getInt("beatCooldown"));
-		setActiveTargetDataLine((String) in.get("activeTargetDataLine"));
+		if (setActiveTargetDataLine((String) in.get("activeTargetDataLine"))) {
+			// If the TargetDataLine is invalid it will not be updated, but a warning will be printed
+			System.out.println("WARNING: invalid TargetDataLine");
+		}
 
 		// Update client settings
 		settings.put("clientSettings", in.get("clientSettings"));
