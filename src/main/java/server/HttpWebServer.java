@@ -217,9 +217,8 @@ public class HttpWebServer {
 				try {
 					num = Integer.parseInt(command.substring(11), 10);
 				} catch (NumberFormatException e){
-					return "invalid color";
+					return "ERROR: invalid color";
 				}
-				System.out.println(num + " =?= " +  (byte) num);
 				bridge.setColor(zone, (byte) num);
 				return "Set color to " + num;
 			}
