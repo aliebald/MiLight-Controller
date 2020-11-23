@@ -385,7 +385,7 @@ public class HttpWebServer {
 					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine(), settings.getSensitivity()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
-					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
+					errorLog += "ERROR: Failed to get TargetDataLine. Please restart the server.";
 				}
 
 			} else if (musicModeController != null && !oldActiveTargetDataLine.equals(settings.getActiveTargetDataLine())){
@@ -395,7 +395,7 @@ public class HttpWebServer {
 					musicModeController.setBeatDetector(new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine(), settings.getSensitivity()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
-					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
+					errorLog += "ERROR: Failed to get TargetDataLine. Please restart the server.";
 				}
 			}
 
