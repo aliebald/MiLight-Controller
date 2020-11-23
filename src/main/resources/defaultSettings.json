@@ -6,6 +6,7 @@
 	"bridgeIpAddress": "",
 	"bridgePort": 5987,
 	"beatCooldown": 100,
+	"sensitivity": 1.0,
 
 	"clientSettings": {
 		"debugMode": true,

@@ -31,6 +31,7 @@ public class BeatDetector {
 	private long historyBufferSize = 43 * 2;
 	private int bufferSize = 1024;
 	private byte[] buffer;
+	private double sensitivity;
 
 	/**
 	 * @param targetDataLine The name of the TargetDataLine that should be opened. Get all possible TargetDataLines using {@link #getPossibleTargetDataLines()}
@@ -40,10 +41,13 @@ public class BeatDetector {
 	 *                 Setting this to a higher value reduces load on the network, Bridge and controllers. A good starting point
 	 *                 could be between 80-200, but values outside of this range can make sense too.
 	 *
+	 * @param sensitivity sensitivity for beat detection. A low value will lead to a lower threshold.
+	 *
 	 * @throws LineUnavailableException Throws an LineUnavailableException if the selected line is not supported in either mono or stereo, 16bit, and 44100Hz.
 	 *
 	 */
-	public BeatDetector(int cooldown, String targetDataLine) throws LineUnavailableException {
+	public BeatDetector(int cooldown, String targetDataLine, double sensitivity) throws LineUnavailableException {
+		this.sensitivity = sensitivity;
 		lastBeat = System.currentTimeMillis();
 		this.cooldown = cooldown;
 		if (targetDataLine != null) {
@@ -79,9 +83,23 @@ public class BeatDetector {
 	 *                 A high value can lead to skipped beats while a low value may lead to the same beat being detected twice.
 	 *                 Setting this to a higher value reduces load on the network, Bridge and controllers. A good starting point
 	 *                 could be between 80-200, but values outside of this range can make sense too.
+	 *
+	 * @param sensitivity sensitivity for beat detection. A low value will lead to a lower threshold.
+	 */
+	public BeatDetector(int cooldown, double sensitivity) throws LineUnavailableException {
+		this(cooldown, null, sensitivity);
+	}
+
+	/**
+	 * Constructs a new BeatDetector using the standard TargetDataLine and a sensitivity of 1.0.
+	 *
+	 * @param cooldown minimum time in milliseconds between beats.
+	 *                 A high value can lead to skipped beats while a low value may lead to the same beat being detected twice.
+	 *                 Setting this to a higher value reduces load on the network, Bridge and controllers. A good starting point
+	 *                 could be between 80-200, but values outside of this range can make sense too.
 	 */
 	public BeatDetector(int cooldown) throws LineUnavailableException {
-		this(cooldown, null);
+		this(cooldown, null, 1.0d);
 	}
 
 	/**
@@ -148,7 +166,7 @@ public class BeatDetector {
 			historyBuffer.pop();
 		}
 
-		threshold = (long) (factor * localAverageEnergy);
+		threshold = (long) (factor * localAverageEnergy * sensitivity);
 
 		// if energy is higher than the threshold and the last beat was at least <code>cooldown</code> milliseconds ago, we have a beat
 		if (energy > threshold && lastBeat + cooldown < System.currentTimeMillis()) {
@@ -172,6 +190,27 @@ public class BeatDetector {
 		Platform.runLater(() -> main.java.control.Display.update(energy, (int) (1.45 * localAverageEnergy), beatForDisplay, (int) threshold));
 		*/
 		return beat;
+	}
+
+	/**
+	 * @return current sensitivity
+	 */
+	public double getSensitivity() {
+		return sensitivity;
+	}
+
+	/**
+	 * Update the sensitivity for the beat detection
+	 *
+	 * @param sensitivity new sensitivity. Must be greater than 0 and less than 2
+	 */
+	public void setSensitivity(double sensitivity) {
+		System.out.println("SET SENSITIVITY TO " + sensitivity);
+		if (sensitivity > 0.0d && sensitivity < 2.0d) {
+			this.sensitivity = sensitivity;
+		} else {
+			System.out.println("WARNING: Invalid value: " + sensitivity + " for sensitivity!");
+		}
 	}
 
 	// for debugging

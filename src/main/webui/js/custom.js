@@ -112,6 +112,8 @@ function send(url, method, contentType, message, replyFunction) {
 // Slider functions
 const beatCooldownSlider = document.getElementById("beatCooldownSlider");
 const beatCooldownNum = document.getElementById("beatCooldownNum");
+const beatSensitivitySlider = document.getElementById("beatSensitivitySlider");
+const beatSensitivityNum = document.getElementById("beatSensitivityNum");
 const brightnessSlider = document.getElementById("brightnessSlider");
 
 // Update the current slider value (each time you drag the slider handle)
@@ -140,8 +142,41 @@ beatCooldownNum.addEventListener("input", function() {
 });
 
 beatCooldownNum.addEventListener("change", function() {
-	console.log("# onended called on beatCooldownNum: ", this.value);
+	console.log("# change called on beatCooldownNum: ", this.value);
 	settings.beatCooldown = this.value;
+	applySettings();
+});
+
+// Sensitivity slider
+beatSensitivitySlider.addEventListener("input", function() {
+	beatSensitivityNum.value = this.value;
+});
+
+beatSensitivitySlider.addEventListener("change", function() {
+	console.log("# change called on beatSensitivitySlider: ", this.value);
+	settings.sensitivity = this.value;
+	applySettings();
+});
+
+beatSensitivityNum.addEventListener("input", function() {
+	if (this.value > 1.5) {
+		beatSensitivitySlider.value = 1.5;
+		this.value = 1.5;
+	} else if (this.value < 0.50) {
+		beatSensitivitySlider.value = 0.5;
+	} else if (this.value === "") {
+		beatSensitivitySlider.value = 0.5;
+	} else {
+		beatSensitivitySlider.value = this.value;
+	}
+});
+
+beatSensitivityNum.addEventListener("change", function() {
+	if (this.value < 0.5) {
+		this.value = 0.5;
+	}
+	console.log("# change called on beatSensitivityNum: ", this.value);
+	settings.sensitivity = this.value;
 	applySettings();
 });
 
@@ -207,6 +242,8 @@ function settingsReady (set) {
 
 	beatCooldownSlider.value		= settings.beatCooldown;
 	beatCooldownNum.value			= settings.beatCooldown;
+	beatSensitivitySlider.value		= settings.sensitivity;
+	beatSensitivityNum.value		= settings.sensitivity;
 
 	const bridgeSelector 			= document.getElementById('bridgeIpAddress');
 	const targetDataLineSelector	= document.getElementById('activeTargetDataLine');

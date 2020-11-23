@@ -85,7 +85,7 @@ public class HttpWebServer {
 
 			if (!settings.getActiveTargetDataLine().equals("none")) {
 				try {
-					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine()));
+					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine(), settings.getSensitivity()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
 				}
@@ -356,7 +356,6 @@ public class HttpWebServer {
 			String oldActiveTargetDataLine = settings.getActiveTargetDataLine();
 			String oldIp = settings.getBridgeIpAddress();
 			int oldPort = settings.getBridgePort();
-			int oldBeatCooldown = settings.getBeatCooldown();
 
 			try {
 				settings.updateSettings(requestBody);
@@ -383,7 +382,7 @@ public class HttpWebServer {
 			if (musicModeController == null && !settings.getActiveTargetDataLine().equals("none")) {
 				// Setup new MusicModeController if necessary
 				try {
-					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine()));
+					musicModeController = new MusicModeController(null, new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine(), settings.getSensitivity()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
 					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
@@ -393,7 +392,7 @@ public class HttpWebServer {
 				// Replace BeatDetector if activeTargetDataLine changed
 				musicModeController.stop();
 				try {
-					musicModeController.setBeatDetector(new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine()));
+					musicModeController.setBeatDetector(new BeatDetector(settings.getBeatCooldown(), settings.getActiveTargetDataLine(), settings.getSensitivity()));
 				} catch (LineUnavailableException e) {
 					settings.resetActiveTargetDataLine();
 					errorLog += "ERROR: Failed to get TargetDataLine. Make sure this line is set to 44100Hz.";
@@ -401,8 +400,13 @@ public class HttpWebServer {
 			}
 
 			// check if BeatCooldown changed
-			if (settings.getBeatCooldown() != oldBeatCooldown) {
+			if (musicModeController != null && settings.getBeatCooldown() != musicModeController.getBeatDetector().getCooldown()) {
 				musicModeController.getBeatDetector().setCooldown(settings.getBeatCooldown());
+			}
+
+			// check if Sensitivity changed
+			if (musicModeController != null && settings.getSensitivity() != musicModeController.getBeatDetector().getSensitivity()) {
+				musicModeController.getBeatDetector().setSensitivity(settings.getSensitivity());
 			}
 
 			if (errorLog.equals("")) {

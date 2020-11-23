@@ -127,6 +127,20 @@ public class Settings {
 	}
 
 	/**
+	 * @return Sensitivity for beat detection
+	 */
+	public double getSensitivity() {
+		return (double) settings.getDouble("sensitivity");
+	}
+
+	/**
+	 * @param sensitivity new sensitivity for beat detection
+	 */
+	public void setSensitivity(double sensitivity){
+		settings.put("sensitivity", sensitivity);
+	}
+
+	/**
 	 * possibleBridgeIpAddresses lists all discovered bridges
 	 *
 	 * @return all possible bridge ip addresses for bridges in the local network (if set)
@@ -162,6 +176,7 @@ public class Settings {
 		setOpenBrowserOnStart(in.getBoolean("openBrowserOnStart"));
 		setBridgePort((Integer) in.getNumber("bridgePort"));
 		setBeatCooldown(in.getInt("beatCooldown"));
+		setSensitivity(in.getDouble("sensitivity"));
 		if (setActiveTargetDataLine((String) in.get("activeTargetDataLine"))) {
 			// If the TargetDataLine is invalid it will not be updated, but a warning will be printed
 			System.out.println("WARNING: invalid TargetDataLine");
