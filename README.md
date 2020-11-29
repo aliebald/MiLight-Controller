@@ -20,13 +20,13 @@ This project is currently in a __beta stage__. Feedback would be greatly appreci
 
 # Music visualizer
 
-The Music visualizer will listen to the selected audio stream and apply a light effekt every time it detects a beat. 
+The Music visualizer will listen to the selected audio stream and apply a light effect every time it detects a beat. 
 To fine tune the beat detection you can modify the following settings on the web ui: 
 
 - __Beat cooldown:__ minimum time in milliseconds between beats. 
     A high value can lead to skipped beats while a low value may lead to the same beat being detected twice. 
     Setting this to a higher value reduces load on the network, Bridge and controllers. 
-    A good starting point could be between 80-200, but values outside of this range can make sense too.
+    A good starting point could be between 80-200, but values outside this range can make sense too.
 - __Beat sensitivity:__ changes the general sensitivity of the beat detection algorithm. A lower value will lead to more beats being detected, while a higher value will lead to less _false positives_. 
 
 
@@ -35,7 +35,7 @@ To fine tune the beat detection you can modify the following settings on the web
 About 43 times a second the algorithm takes a sample of the current audio output.
 In the first step the audio sample gets normalized to avoid the volume of impacting the beat detection.
 After that, we compute the _energy_ of the sample. The _energy_ is simply the sum of the absolute values in the buffer.
-The _energy_ then gets stored in a buffer, together with the last ast 86 (~2 seconds, this value may not be final) samples energy.
+The _energy_ then gets stored in a buffer, together with the last 86 (~2 seconds, this value may not be final) samples energy.
 We use this buffer to then calculate the variance of all values in it. This will help to adjust to different styles of music, by dynamically adjusting the threshold. 
 The threshold is calculated using the variance, a user set sensitivity as well as a static value.
 If the current energy is greater than the threshold, and the last detected beat is at least n milliseconds ago, where n is the user input value for __Beat cooldown__, a beat gets detected. 
@@ -45,7 +45,7 @@ This beat detection algorithm is loosely based on the article
 [Beat Detection Algorithms](https://www.gamedev.net/reference/articles/article1952.asp)
 by Frédéric Patin.
 If you are interested in this topic, a more in depth description and more complex algorithms, I can recommend his article.
-Please Note the beat detection algorithm used in this project is not exactly what he describes.
+Please note the beat detection algorithm used in this project is not exactly what he describes.
 
 
 An alternative implementation, better suited for music with a lot of noise, may come in the feature, but the current version already works pretty well.
@@ -68,15 +68,15 @@ Your Ip Address as well as the used port will show up in the terminal after the 
 ### Setup the music visualizer
 
 To use the music visualizer an audio stream needs to be selected.
-To select an audio stream, got to the settings (klick on the 3 bars on the top right -> settings) and select one of the available streams under "Audio input for music visualizer".
+To select an audio stream, got to the settings (click on the 3 bars on the top right -> settings) and select one of the available streams under "Audio input for music visualizer".
 
 If you want to use the output of your pc, you currently need some type of audio loopback. 
 If you use Windows, you can use the _Stereomix_ or try the _primary sound recording driver_. 
-Otherwise, you can try using a physical audio loopback with e.g. a jack cable.
+Otherwise, you can try using a physical audio loop back with e.g. a jack cable.
 
 # Planned Features
 
-- __Ui style revise__
+- __UI style revise__
 - __More options for Music Modes__
 - __More/improved Music Modes__
 - __Custom Modes__: Similar modes to the Build in Modes (which are build into the MiLight Controller) but more extensive.
