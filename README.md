@@ -17,6 +17,7 @@ This project is currently in a __beta stage__. Feedback would be greatly appreci
 - Single and multi zone control
 - Build in light Modes
 - Automatic Bridge discovery
+- Responsive web design
 
 # Music visualizer
 
@@ -93,4 +94,4 @@ contact.liebald(at)gmail.com
 
 # License
 
-TODO
+Apache License 2.0
