@@ -14,20 +14,54 @@
  *  limitations under the License.
  */
 
+/*
+############################
+		Bootstrap
+############################
+*/
+
+.list-group .list-group-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+	.list-group .list-group-item {
+		height: 75px;
+		font-size: 1.15rem;
+	}
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) {
+	.list-group .list-group-item {
+		height: 100px;
+		font-size: 1.25rem;
+	}
+}
+
+/*
+############################
+		Custom CSS
+############################
+*/
+
 h1 {
-	font-size: 1.8em; 
+	font-size: 1.8em;
 }
 
 h2 {
-	font-size: 1.6em; 
+	font-size: 1.6em;
 }
 
 h3 {
-	font-size: 1.35em; 
+	font-size: 1.35em;
 }
 
 h4 {
-	font-size: 1.2em; 
+	font-size: 1.2em;
 }
 
 body {
@@ -40,10 +74,6 @@ header {
 	color: black;
 }
 
-p, header, h1, h2, h3, h4{
-
-}
-
 /* Remove stepper for input in Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -54,10 +84,10 @@ input::-webkit-inner-spin-button {
 /* stepper for input in Firefox */
 input[type=number] {
 	-moz-appearance: textfield;
+
 }
 
-button:hover, 
-input[type=number]:hover {
+button:hover {
 	background-color: #6c757d;
 }
 
@@ -293,7 +323,7 @@ input[type=number]:hover {
 }
 
 .toastContainer {
-	z-index: 1;
+	z-index: 1050;
 	position: relative;
 	display: flex;
 	justify-content: center;
@@ -322,24 +352,52 @@ input[type=number]:hover {
 	border-bottom-left-radius: 0 !important;
 }
 
+
+.form-group .form-check-input,
+.form-group .form-check-label,
+.form-group .form-control {
+	cursor: pointer;
+}
+
+.modesNav {
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-align: center;
+	align-items: center;
+	justify-content: center;
+}
+
+.navbar .navbar-nav .nav-link {
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-align: center;
+	align-items: center;
+
+	color: rgba(0,0,0,0.8);
+}
+
+.navbar .navbar-nav .nav-link:hover {
+	color: rgba(0,0,0,1);
+}
+
 /* Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
-	.color, .colorRemove, .addColor, .btn, .nav-link {
+	.color, .colorRemove, .addColor, .btn, .modesNav {
 		height: 75px;
 	}
 
-	.responsiveText, .btn, .nav-link {
+	.responsiveText, .btn, .modesNav {
 		font-size: 1.15rem;
 	}
 }
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
-	.color, .colorRemove, .addColor, .btn, .nav-link {
+	.color, .colorRemove, .addColor, .btn, .modesNav {
 		height: 100px;
 	}
 
-	.responsiveText, .btn, .nav-link {
+	.responsiveText, .btn, .modesNav {
 		font-size: 1.25rem;
 	}
 
@@ -352,30 +410,3 @@ input[type=number]:hover {
 	}
 }
 
-/*
-############################
-		Bootstrap
-############################
-*/
-
-.list-group .list-group-item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-/* Medium devices (tablets, less than 992px) */
-@media (max-width: 991.98px) {
-	.list-group .list-group-item {
-		height: 75px;
-		font-size: 1.15rem;
-	}
-}
-
-/* Extra small devices (portrait phones, less than 576px) */
-@media (max-width: 575.98px) {
-	.list-group .list-group-item {
-		height: 100px;
-		font-size: 1.25rem;
-	}
-}

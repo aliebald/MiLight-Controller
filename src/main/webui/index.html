@@ -17,11 +17,15 @@ limitations under the License.
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta
+			name="description"
+			content="A comprehensive light controller for the MiLight bridge v5. Featuring a music visualizer and a responsive web design."
+		/>
 		<title>MiLight Controller</title>
 
 		<!-- Bootstrap css -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-		<link rel="stylesheet" type="text/css" href="css\custom.css">
+		<link rel="stylesheet" type="text/css" href="css/custom.css">
 	</head>
 
 	<body>
@@ -41,7 +45,7 @@ limitations under the License.
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title textDark" id="settingsModalLabel">Settings</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -78,7 +82,7 @@ limitations under the License.
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-danger" onclick="resetSettings()">&nbsp;Reset&nbsp;</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">&nbsp;Close&nbsp;</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">&nbsp;Close&nbsp;</button>
 						<button type="button" class="btn btn-primary" onclick="applySettings()">&nbsp;Save changes&nbsp;</button>
 					</div>
 				</div>
@@ -91,7 +95,7 @@ limitations under the License.
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title textDark" id="aboutModalLabel">About this MiLight controller</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -101,7 +105,7 @@ limitations under the License.
 						</p>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 					</div>
 				</div>
 			</div>
@@ -111,10 +115,10 @@ limitations under the License.
 		<div class="toastContainer" aria-live="polite" aria-atomic="true">
 			<div class="toastInner">
 				<!-- Saved settings successfully toast -->
-				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" id="saveSettingsSuccess" data-delay="2000">
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" id="saveSettingsSuccess" data-delay="2000">
 					<div class="toast-header">
 						<strong class="mr-auto success">Saved settings</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -123,10 +127,10 @@ limitations under the License.
 					</div>
 				</div>
 				<!-- Failed to save settings toast -->
-				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false" id="saveSettingsError">
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false" id="saveSettingsError">
 					<div class="toast-header">
 						<strong class="mr-auto error">Failed to save settings</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -135,10 +139,10 @@ limitations under the License.
 					</div>
 				</div>
 				<!-- Failed to add custom color -->
-				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" id="customColorError" data-delay="4000">
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" id="customColorError" data-delay="5000">
 					<div class="toast-header">
 						<strong class="mr-auto error">Failed add custom color</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -147,10 +151,10 @@ limitations under the License.
 					</div>
 				</div>
 				<!-- Missing target data line for music modes toast -->
-				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" id="missingAudioInputError" data-delay="4000">
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" id="missingAudioInputError" data-delay="5000">
 					<div class="toast-header">
 						<strong class="mr-auto error">Missing Audio Input</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -159,10 +163,10 @@ limitations under the License.
 					</div>
 				</div>
 				<!-- General communication error -->
-				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="true" id="generalCommunicationError" data-delay="4000">
+				<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" id="generalCommunicationError" data-delay="5000">
 					<div class="toast-header">
 						<strong class="mr-auto error">Communication Error</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+						<button type="button" class="ml-2 mb-1 close" data-bs-dismiss="toast" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -173,6 +177,7 @@ limitations under the License.
 			</div>
 		</div>
 		<!-- Top Bar -->
+		<!--
 		<div class="py-3 container-xl">
 			<div class="row topBar">
 				<div class="col-4">
@@ -190,7 +195,37 @@ limitations under the License.
 				</div>
 			</div>
 		</div>
+		-->
 
+		<!-- Navigation -->
+		<div class="container-xl topBar">
+			<nav class="navbar navbar-expand-lg navbar-light py-1">
+				<div class="container">
+					<a class="navbar-brand" href="#">MiLight Music Controller</a>
+					<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav">
+							<li class="nav-item">
+								<a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Settings</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#aboutModal">About</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="mailto:contact.liebald@gmail.com">Contact</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" href="https://github.com/ALiebald/MiLight-Controller">GitHub</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</div>
+
+		<!-- Content -->
 		<div class="container-xl">
 			<div class="row">
 				<div class="col-lg col-md-12 col-sm-12 section mr-md-3 my-2">
@@ -250,10 +285,10 @@ limitations under the License.
 					<!-- navigation tabs -->
 					<ul class="nav nav-pills nav-fill modeSelector pt-2 pb-2" id="pills-tab" role="tablist">
 						<li class="nav-item noBorderRadiusRight">
-							<a class="nav-link d-flex justify-content-center align-items-center noBorderRadiusRight textDark active" id="buildInModes-tab" data-toggle="pill" href="#buildInModes" role="tab" aria-controls="pills-home" aria-selected="true">Build in Modes</a>
+							<a class="nav-link modesNav noBorderRadiusRight textDark active" id="buildInModes-tab" data-toggle="pill" href="#buildInModes" role="tab" aria-controls="pills-home" aria-selected="true">Build in Modes</a>
 						</li>
 						<li class="nav-item noBorderRadiusLeft">
-							<a class="nav-link d-flex justify-content-center align-items-center noBorderRadiusLeft textDark" id="musicModes-tab" data-toggle="pill" href="#musicModes" role="tab" aria-controls="pills-profile" aria-selected="false">Music Modes</a>
+							<a class="nav-link modesNav noBorderRadiusLeft textDark" id="musicModes-tab" data-toggle="pill" href="#musicModes" role="tab" aria-controls="pills-profile" aria-selected="false">Music Modes</a>
 						</li>
 					</ul>
 					<!-- Content -->
@@ -347,7 +382,7 @@ limitations under the License.
 	<script src="https://kit.fontawesome.com/233310fc18.js" crossorigin="anonymous"></script>
 	<!-- Bootstrap -->
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 	<!-- iro.js for color picker -->
 	<script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 	<!-- custom js -->

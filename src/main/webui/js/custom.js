@@ -420,8 +420,6 @@ function removeCustomColor(customColorHSLId) {
 		}
 	}
 
-	console.log(old);
-	console.log(settings.clientSettings.customColors);
 	deleteCustomColors();
 	applySettings();
 	showCustomColors();
@@ -462,10 +460,10 @@ document.getElementById("debugMode").addEventListener('change', function (event)
 // sets visibility of debug elements
 function switchDebugMode () {
 	if (settings.clientSettings.debugMode) {
-		document.getElementById("response").style.visibility				= "visible";
+		document.getElementById("response").style.visibility					= "visible";
 		document.getElementById("forceBridgeIpAddressElem").style.visibility	= "visible";
 	} else {
-		document.getElementById("response").style.visibility				= "hidden";
+		document.getElementById("response").style.visibility					= "hidden";
 		document.getElementById("forceBridgeIpAddressElem").style.visibility	= "hidden";
 	}
 }
@@ -533,12 +531,25 @@ document.getElementById("sirenLightsTab").onclick = function () {
 	setMusicMode("Siren", "sirenLightsTab");
 }
 
+
+// $('.toast').toast("show");
+
+const toastElList = [].slice.call(document.querySelectorAll('.toast'))
+const toastList = toastElList.map(function (toastEl) {
+	return new bootstrap.Toast(toastEl)
+})
+
 // TODO find a way around this
 // show and discard toasts to avoid them blocking on/off buttons, even though they are invisible
-$('.toast').toast("show");
+toastList.map((toast) => {
+	toast.show();
+});
+
 setTimeout(function() {
-	$('.toast .close').click();
-}, 150);
+	toastList.map((toast) => {
+		toast.hide();
+	});
+}, 200);
 
 
 
