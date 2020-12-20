@@ -273,55 +273,6 @@ button:hover {
 	width: 100px;
 }
 
-.sidenav {
-	height: 100%;
-	position: fixed;
-	padding-top: 60px;
-	background-color: #f2f2f2;
-	top: 0;
-	right: 0;
-	z-index: 3;
-	overflow-x: hidden;
-	transition: 0.5s;
-}
-
-.sidenav a.sidenavBtn, .sidenav .closeBtn {
-	text-decoration: none;
-	font-size: 25px;
-	color: #6c757d;
-	display: block;
-	transition: 0.3s;
-}
-
-.sidenav a.sidenavBtn {
-	padding: 8px 35px 8px 8px;
-	text-align: right;
-}
-
-.sidenav a:hover, .sidenav .nav-link:hover, .sidenav .navSymbol:hover {
-	color: black;
-}
-
-.sidenav .closeBtn {
-	position: absolute;
-	top: 0;
-	font-size: 36px;
-	margin-left: 20px;
-}
-
-.sidenav .navSymbol {
-	font-size: 25px;
-	position: absolute;
-	left: 20px;
-	bottom: 20px;
-	color: #6c757d;
-	padding-left: 15px;
-}
-
-.sidenav .nav-link:hover {
-	color: black;
-}
-
 .toastContainer {
 	z-index: 1050;
 	position: relative;
@@ -351,7 +302,6 @@ button:hover {
 	border-top-left-radius: 0 !important;
 	border-bottom-left-radius: 0 !important;
 }
-
 
 .form-group .form-check-input,
 .form-group .form-check-label,
@@ -399,14 +349,6 @@ button:hover {
 
 	.responsiveText, .btn, .modesNav {
 		font-size: 1.25rem;
-	}
-
-	.sidenav {
-		padding-top: 15px;
-	}
-
-	.sidenav a {
-		font-size: 18px;
 	}
 }
 

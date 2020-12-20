@@ -17,19 +17,6 @@
 let zones = [1,1,1,1];
 let brightness = 80;
 
-function toggleNav() {
-	let nav = document.getElementById("sidenav");
-	if(nav.style.width === "0px") {
-		nav.style.width = "200px";
-	} else {
-		nav.style.width = "0";
-	}
-}
-
-function closeNav() {
-	document.getElementById("sidenav").style.width = "0";
-}
-
 const zoneAll	= document.getElementById("zoneAll");
 const zone1 	= document.getElementById("zone1");
 const zone2 	= document.getElementById("zone2");
