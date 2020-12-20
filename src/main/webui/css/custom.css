@@ -330,6 +330,13 @@ button:hover {
 	color: rgba(0,0,0,1);
 }
 
+.onOffBtns {
+	display: flex;
+	-ms-flex-align: center;
+	align-items: center;
+	justify-content: left;
+}
+
 /* Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
 	.color, .colorRemove, .addColor, .btn, .modesNav {

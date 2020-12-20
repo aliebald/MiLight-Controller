@@ -219,14 +219,9 @@ limitations under the License.
 		<div class="container-xl">
 			<div class="row">
 				<div class="col-lg col-md-12 col-sm-12 section mr-md-3 my-2">
+					<!-- Color picker and brightness-->
 					<div class="row">
-						<!-- Color picker and brightness-->
 						<div class="col-4 py-2 sliderCollection">
-							<!--
-							<div class="img-center">
-								<i class="far fa-sun fa-2x textDark img-center"></i>
-							</div>
-							-->
 							<input type="range" min="0" max="100" value="80" class="brightnessSlider" id="brightnessSlider">
 						</div>
 						<div class="col-8 py-2 pt-2">
@@ -247,7 +242,11 @@ limitations under the License.
 					</div>
 
 					<div class="row py-2 ">
-						<div class="col-12">
+						<div class="col-6 onOffBtns textDark my-1">
+							<button type="button"  onclick="sendCommand('turnOn')" class="btn btn-secondary mx-1 textDark">&nbsp;On&nbsp;</button>
+							<button type="button"  onclick="sendCommand('turnOff')" class="btn btn-secondary mx-1 textDark">&nbsp;Off&nbsp;</button>
+						</div>
+						<div class="col-6">
 							<button type="button" class="btn btn-warning float-right" onclick="toggleColorEdit()" id="toggleEditColorsBtn">Toggle Edit</button>
 						</div>
 					</div>
