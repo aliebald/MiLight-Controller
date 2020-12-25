@@ -56,9 +56,9 @@ public class HttpWebServer {
 		this.port 		= port;
 		this.settings	= settings;
 
-		site 			= new String(Files.readAllBytes(Paths.get(path + "\\index.html")));
-		customCSS 		= new String(Files.readAllBytes(Paths.get(path + "\\css\\custom.css")));
-		customJs		= new String(Files.readAllBytes(Paths.get(path + "\\js\\custom.js")));
+		site 			= new String(Files.readAllBytes(Paths.get(path + "/index.html")));
+		customCSS 		= new String(Files.readAllBytes(Paths.get(path + "/css/custom.css")));
+		customJs		= new String(Files.readAllBytes(Paths.get(path + "/js/custom.js")));
 	}
 
 	/**

@@ -30,12 +30,12 @@ public class Controller {
 	// If def is true then the paths are set to the dev paths, if false they are set to release paths (required for builds)
 	private static final boolean dev = true;
 
-	// Develop: ".\\src\\main\\webui"
-	// Release: ".\\webui"
-	private static final String webuiPath		= dev ? ".\\src\\main\\webui" : ".\\webui";
-	// Develop: ".\\src\\main\\resources\\"
-	// Release: ".\\settings\\"
-	private static final String settingsPath	= dev ? ".\\src\\main\\resources" : ".\\settings";
+	// Develop: "./src/main/webui"
+	// Release: "./webui"
+	private static final String webuiPath		= dev ? "./src/main/webui" : "./webui";
+	// Develop: "./src/main/resources/"
+	// Release: "./settings/"
+	private static final String settingsPath	= dev ? "./src/main/resources" : "./settings";
 
 	private HttpWebServer server;
 	private Settings settings;
