@@ -14,6 +14,22 @@
  *  limitations under the License.
  */
 
+:root {
+	--btnPrimaryColor: #bfbfbf;
+	--btnHoverColor: #6c757d;
+
+	--textPrimaryColor: #fff;
+	--textDarkColor: #000;
+	--textGreyColor: #6c757d;
+	--backgroundColor: #3a3a3a;
+
+	--boxBackgroundColor: #ededed;
+	--boxBorderColor: #bfbfbf;
+
+	--navTextColor: rgba(0,0,0,0.8);
+	--navTextHoverColor: rgba(0,0,0,1);
+}
+
 /*
 ############################
 		Bootstrap
@@ -24,6 +40,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	background-color: rgba(256,256,256, 75);
 }
 
 /* Medium devices (tablets, less than 992px) */
@@ -65,13 +82,9 @@ h4 {
 }
 
 body {
-	background-color: #333;
-	color: #fff;
-}
-
-header {
-	background-color: #e6e6e6; 
-	color: black;
+	padding-top: 0.5rem;
+	background-color: var(--backgroundColor);
+	color: var(--textPrimaryColor);
 }
 
 /* Remove stepper for input in Chrome, Safari, Edge, Opera */
@@ -88,7 +101,7 @@ input[type=number] {
 }
 
 button:hover {
-	background-color: #6c757d;
+	background-color: var(--btnHover);
 }
 
 .debug {
@@ -96,24 +109,24 @@ button:hover {
 }
 
 .textDark, .textDark:hover {
-	color: black;
+	color: var(--textDarkColor);
 }
 
 .textGrey {
-	color: #6c757d;
+	color: var(--textGreyColor);
 }
 
 .btn-secondary,
 .modeSelector .nav-item,
 .modeTabs .list-group-item.active {
-	background-color: #bfbfbf;
+	background-color: var(--btnPrimaryColor);
 	outline: none;
 	border: none;
 }
 
 .nav-pills .nav-link.active,
 .modeTabs .list-group-item.active {
-	background-color: #545b62;
+	background-color: var(--btnHoverColor);
 }
 
 .modeSelector .nav-item {
@@ -126,12 +139,11 @@ button:hover {
 }
 
 .box, .topBar, .section {
-	border: 3px solid #bfbfbf;
-	background: #f2f2f2;	
+	border: 3px solid var(--boxBorderColor);
+	background: var(--boxBackgroundColor);
 }
 
 .box {
-	border: 3px solid #bfbfbf;
 	padding-top: 80%;
 	border-radius: 25px;
 	width: 100%;
@@ -157,7 +169,7 @@ button:hover {
 }
 
 .color, .colorRemove, .addColor {
-	border: 1px solid #bfbfbf;
+	border: 1px solid var(--boxBorderColor);
 	border-radius: 10px;
 	height: 50px;
 }
@@ -266,7 +278,7 @@ button:hover {
 }
 
 .separator {
-	border-bottom: 3px solid #bfbfbf;
+	border-bottom: 3px solid var(--boxBorderColor);
 }
 
 .color-picker {
@@ -323,11 +335,11 @@ button:hover {
 	-ms-flex-align: center;
 	align-items: center;
 
-	color: rgba(0,0,0,0.8);
+	color: var(--navTextColor);
 }
 
 .navbar .navbar-nav .nav-link:hover {
-	color: rgba(0,0,0,1);
+	color: var(--navTextHoverColor);
 }
 
 .onOffBtns {
