@@ -213,22 +213,32 @@ colorPicker.on('input:change', function (color) {
 
 		// Change color of addCustomColorButton
 		addCustomColorButton.style.background = color.hexString;
-		setColorTo(color.hsl.h, color.hsl.s, color.hsl.s);
+		setColorTo(color.hsl.h, color.hsl.s, color.hsl.s, false);
 	}
 });
 
 // Takes the h, s and l values of a hsl color object and sends the converted 8 bit, MiLight compatible color, to the server
-function setColorTo(h, s, l) {
-		// Adjust the color a bit, since MiLight seems to have its colorscheme a bit off
-		let adjustedColor = h + 40;
-		if (adjustedColor > 360) {
-			adjustedColor -= 360;
-		}
+function setColorTo(h, s, l, updateColorPicker) {
+	// Adjust the color a bit, since MiLight seems to have its colorscheme a bit off
+	let adjustedColor = h + 40;
+	if (adjustedColor > 360) {
+		adjustedColor -= 360;
+	}
+	if (updateColorPicker) {
+		setColorWheelTo(h, s, l);
+	}
 
-		// scale down to 8 bit and send
-		sendCommand("setColorTo:" + Math.round((adjustedColor) * (256 / 360)));
+	// scale down to 8 bit and send
+	sendCommand("setColorTo:" + Math.round((adjustedColor) * (256 / 360)));
 
-		//TODO include saturation (when supported by the Bridge);
+	//TODO include saturation (when supported by the Bridge);
+}
+
+// Sets the selector of the color wheel to the specified hsl value
+function setColorWheelTo(h, s, l) {
+	const addCustomColorButton = document.getElementById("addCustomColorButton");
+	addCustomColorButton.style.background = `hsl(${h}, ${s}%, ${l}%)`;
+	colorPicker.setColors([{h,s,l}]);
 }
 
 // Settings
@@ -366,7 +376,7 @@ function showCustomColors() {
 	settings.clientSettings.customColors.forEach(function (item, index) {
 		console.log(item);
 		customColorBtn += `<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2 colorBtn">`
-			+ `<button type="button" onclick="setColorTo(${item.hsl.h},${item.hsl.s},${item.hsl.l})" class="btn color" style="background: ${item.hex}" id="${item.hsl.h}${item.hsl.s}${item.hsl.l}"></button>`
+			+ `<button type="button" onclick="setColorTo(${item.hsl.h},${item.hsl.s},${item.hsl.l},true)" class="btn color" style="background: ${item.hex}" id="${item.hsl.h}${item.hsl.s}${item.hsl.l}"></button>`
 			+ `<button type="button" onclick="removeCustomColor('${item.hsl.h}${item.hsl.s}${item.hsl.l}')" class="btn colorRemove noDisplay">`
 			+ `<i class="far fa-trash-alt fa-lg"></i></button></div>`;
 	});
@@ -388,7 +398,7 @@ function addCustomColorBtn(customColor) {
 	const insertIndex = colorButtons.innerHTML.indexOf("<!-- Add custom color button -->");
 	let customColorBtn =
 		`<div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 py-2 colorBtn">`
-		+ `<button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l})" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button>`
+		+ `<button type="button" onclick="setColorTo(${customColor.hsl.h},${customColor.hsl.s},${customColor.hsl.l},true)" class="btn color" style="background: ${customColor.hex}" id="${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}"></button>`
 		+ `<button type="button" onclick="removeCustomColor('${customColor.hsl.h}${customColor.hsl.s}${customColor.hsl.l}')" class="btn colorRemove noDisplay">`
 		+ `<i class="far fa-trash-alt fa-lg"></i></button></div>`;
 
